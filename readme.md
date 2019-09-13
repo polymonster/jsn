@@ -33,8 +33,15 @@ standard_json = json.loads(to_json(open("file.jsn", "r").read()))
 views:
 {
     // allows comments
+    
+    // includes (not yet implemented)
+    include: "other.jsn",
+    
     main_view:
     {
+        // member wise object inheritence (not yet implemented)
+        inherit: ["another_key"],
+        
         target             : ["main_colour", "main_depth"],
         clear_colour       : [0.0, 0.0, 0.0, 1.0],
         clear_depth        : 1.0,
