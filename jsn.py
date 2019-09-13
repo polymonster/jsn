@@ -159,7 +159,7 @@ if __name__ == "__main__":
         exit(1)
     for i in info.inputs:
         if os.path.isdir(i):
-            for root, dirs, files in os.walk(source):
+            for root, dirs, files in os.walk(i):
                 for file in files:
                     output_file = os.path.join(info.output_dir, file)
                     create_dir(output_file)
