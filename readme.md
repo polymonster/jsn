@@ -1,6 +1,6 @@
 # jsn
 
-jsn is a simple json like syntax that is processed and converted to compliant json through a simple python script. The intention of this project is to provide more user friendly and lenient language that can directly be plugged into existing languages or libraries which support fully complient json.
+A simple json like syntax that is processed and converted to compliant json through a simple python script. The intention of this project is to provide more user friendly and lenient language that can directly be plugged into existing languages or libraries which support fully complient json.
 
 There are other json variants such as json5 that achieve the same goal but I wanted a simple replacement that did not require pip, jsn can be used anywhere by simply including jsn.py into your pipelines.
 
