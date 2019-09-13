@@ -18,8 +18,8 @@ python3 jsn.py -i <list of input files or directories> -o <output directory>
 
 ## Example
 
-```yaml
-// syntax highlights nicely in most text editors with c++ or yaml
+```c++
+// syntax highlights nicely in most text editors with c++
 
 views:
 {
