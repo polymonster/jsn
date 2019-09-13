@@ -12,7 +12,7 @@ python3
 
 Write .jsn files and convert them to json then pass the compliant json code to any other tools and languages:
 
-```shell
+```
 python3 jsn.py -i <list of input files or directories> -o <output directory>
 ```
 
@@ -21,12 +21,11 @@ Convert jsn to json in a python script and pass to native python json.
 ```python
 import jsn
 
-standard_json = json.loads(to_json(open("file.jsn", "r).read()))
+standard_json = json.loads(to_json(open("file.jsn", "r").read()))
 
 ```
  
-
-## Example
+## Example jsn
 
 ```c++
 // syntax highlights nicely in most text editors with c++
