@@ -1,4 +1,4 @@
-# lightweight json format without the need for quotes, allowing comments and more
+# lightweight json format without the need for quotes, allowing comments, etc..
 import json
 import sys
 import os
