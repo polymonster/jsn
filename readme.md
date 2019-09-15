@@ -18,7 +18,7 @@ python3 jsn.py -i <list of input files or directories> -o <output directory>
 
 ## Example
 
-```javascript
+```yaml
 // syntax highlights nicely in most text editors with c++
 
 {         
