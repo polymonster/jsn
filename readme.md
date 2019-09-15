@@ -4,16 +4,19 @@ A simple json like syntax that is processed and converted to compliant json thro
 
 There are other json variants such as json5 that achieve the same goal but I wanted a simple replacement that did not require pip, jsn can be used anywhere by simply including jsn.py into your pipelines as a pre-process step and actual json is used from there on.
 
-## Requirements
-
-python3
-
 ## Usage
 
-Write .jsn files and convert them to json then pass the compliant json code to any other tools and languages.
+Write .jsn files and convert them to json then pass the compliant json code to any other tools and languages:
 
 ```
 python3 jsn.py -i <list of input files or directories> -o <output directory>
+```
+
+Use in python as dict:
+
+```
+import jsn
+jsn.loads(open("jsn_file.jsn", "r).read())
 ```
 
 ## Example
