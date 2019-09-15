@@ -16,7 +16,7 @@ Use in python as dict:
 
 ```python
 import jsn
-jsn.loads(open("jsn_file.jsn", "r).read())
+dict = jsn.loads(open("jsn_file.jsn", "r).read())
 ```
 
 ## Example
