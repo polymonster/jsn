@@ -1,10 +1,8 @@
 # jsn
 
-A simple JSON like syntax that is processed and converted to compliant JSON through a single python script. 
+A simple json like syntax that is processed and converted to compliant json through a single python script. The intention of this project is to provide a more user friendly and lenient language than json that can directly be plugged into existing languages or libraries which support fully complient json.
 
-The aim of jsn is to provide a more user friendly and lenient language than JSON that can directly be plugged into existing languages or libraries which support fully complient JSON. JSON is great but it can be at times infuritating to work with when fixing errors with trailing commas or having to contiually quote strings!
-
-Other JSON variants such as JSON5 or other languages such as TOML that achieve the same goal but I wanted a simple replacement that did not require pip for python and wanted to plug into all the languages, tools and apis which support JSON directly, so jsn can be used anywhere by simply including jsn.py into your pipelines as a pre-process step and standard JSON is used from there on..
+There are other json variants such as json5 that achieve the same goal but I wanted a simple replacement that did not require pip, jsn can be used anywhere by simply including jsn.py into your pipelines as a pre-process step and actual json is used from there on.
 
 ## Requirements
 
@@ -12,22 +10,13 @@ python3
 
 ## Usage
 
-Write .jsn files and convert them to json then pass the compliant json code to any other tools and languages:
+Write .jsn files and convert them to json then pass the compliant json code to any other tools and languages.
 
 ```
 python3 jsn.py -i <list of input files or directories> -o <output directory>
 ```
 
-Convert jsn to json in a python script and pass to native python json.
-
-```python
-import jsn
-
-standard_json = json.loads(to_json(open("file.jsn", "r").read()))
-
-```
- 
-## Example jsn
+## Example
 
 ```c++
 // syntax highlights nicely in most text editors with c++
@@ -35,15 +24,8 @@ standard_json = json.loads(to_json(open("file.jsn", "r").read()))
 views:
 {
     // allows comments
-    
-    // includes (not yet implemented)
-    include: "other.jsn",
-    
     main_view:
     {
-        // member wise object inheritence (not yet implemented)
-        inherit: ["another_key"],
-        
         target             : ["main_colour", "main_depth"],
         clear_colour       : [0.0, 0.0, 0.0, 1.0],
         clear_depth        : 1.0,
