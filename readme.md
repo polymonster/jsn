@@ -14,7 +14,7 @@ python3 jsn.py -i <list of input files or directories> -o <output directory>
 
 Use in python as dict:
 
-```
+```python
 import jsn
 jsn.loads(open("jsn_file.jsn", "r).read())
 ```
