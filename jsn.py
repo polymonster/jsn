@@ -240,12 +240,26 @@ def inherit_dict_recursive(d, d2):
                         inherit_dict(d, d2[i])
                         d.pop("jsn_inherit", None)
                         return
+            else:
+                print("jsn error: jsn_inherit must be an array of keys to inherit")
         if type(v) == dict:
             inherit_dict_recursive(v, d)
 
 
+# add jsn includes
+def add_jsn_includes(j):
+    if "jsn_include" in j.keys():
+        if type(j["jsn_include"]) == list:
+            for i in j["jsn_include"]:
+                include_dict = loads(open(i, "r").read())
+                inherit_dict(j, include_dict)
+        else:
+            print("jsn error: jsn_include must be an array of files to include")
+    return j
+
+
 # convert jsn to json
-def to_json(jsn):
+def loads(jsn):
     jsn = remove_comments(jsn)
     jsn = clean_src(jsn)
     jsn = remove_trailing_commas(jsn)
@@ -255,19 +269,20 @@ def to_json(jsn):
     # validate
     try:
         j = json.loads(jsn)
-    except:
+    except json.decoder.jsondecodeerror:
         jsn_lines = jsn.split("\n")
         for l in range(0, len(jsn_lines)):
             print(str(l+1) + " " + jsn_lines[l])
         traceback.print_exc()
         exit(1)
 
+    # include
+    add_jsn_includes(j)
+
     # inherit
     inherit_dict_recursive(j, j)
 
-    fmt = json.dumps(j, indent=4)
-
-    return fmt
+    return j
 
 
 # convert jsn to json and
@@ -275,7 +290,8 @@ def convert_jsn(input_file, output_file):
     print("converting: " + input_file + " to " + output_file)
     file = open(input_file, "r")
     output_file = open(output_file, "w+")
-    output_file.write(to_json(file.read()))
+    jdict = loads(file.read())
+    output_file.write(json.dumps(jdict, indent=4))
     output_file.close()
     file.close()
 
