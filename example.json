@@ -1,0 +1,35 @@
+{
+    "json": {
+        "int": 0, 
+        "array": [
+            1, 
+            2, 
+            3
+        ], 
+        "float": 1.0, 
+        "bool": true
+    }, 
+    "object": {
+        "another": "unquoted_string", 
+        "unquoted_strings": "string", 
+        "hex": 255, 
+        "base": "foo", 
+        "sub_object": {
+            "two": "2", 
+            "one": "1"
+        }, 
+        "unquoted_keys": "hello"
+    }, 
+    "new_object": {
+        "sub_object": {
+            "one": "1", 
+            "three": "3", 
+            "two": "2"
+        }, 
+        "unquoted_strings": "string", 
+        "hex": 255, 
+        "base": "bar(overrideshello)", 
+        "another": "unquoted_string", 
+        "unquoted_keys": "hello"
+    }
+}
