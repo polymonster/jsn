@@ -4,16 +4,19 @@ A simple json like syntax that is processed and converted to compliant json thro
 
 There are other json variants such as json5 that achieve the same goal but I wanted a simple replacement that did not require pip, jsn can be used anywhere by simply including jsn.py into your pipelines as a pre-process step and actual json is used from there on.
 
-## Requirements
-
-python3
-
 ## Usage
 
-Write .jsn files and convert them to json then pass the compliant json code to any other tools and languages.
+Write .jsn files and convert them to json then pass the compliant json code to any other tools and languages:
 
 ```
 python3 jsn.py -i <list of input files or directories> -o <output directory>
+```
+
+Use in python as dict:
+
+```python
+import jsn
+dict = jsn.loads(open("jsn_file.jsn", "r).read())
 ```
 
 ## Example
@@ -21,30 +24,96 @@ python3 jsn.py -i <list of input files or directories> -o <output directory>
 ```c++
 // syntax highlights nicely in most text editors with c++
 
-views:
-{
-    // allows comments
-    main_view:
+{         
+    // allow comments
+    
+    // standard json
+    "json":
     {
-        target             : ["main_colour", "main_depth"],
-        clear_colour       : [0.0, 0.0, 0.0, 1.0],
-        clear_depth        : 1.0,
-        colour_write_mask  : 0xf,
-        blend_state        : "disabled",
-        viewport           : [0.0, 0.0, 1.0, 1.0],
-        raster_state       : "default",
-        depth_stencil_state: "default",
-        scene              : "main_scene",
-        camera             : "model_viewer_camera",
-        scene_views        : ["ces_render_scene"],
-        render_flags       : ["forward_lit"]
-
-        sampler_bindings:
-        [
-            { texture: "shadow_map", unit: 15, state: "wrap_linear", shader: "ps" },
-            { texture: "area_light_textures", unit: 11, state: clamp_linear, shader: "ps" },
-        ], // allows trailing commas
+        "array": [1, 2, 3],
+        "bool": true,
+        "int": 0,
+        "float": 1.0
     },
- }
+    
+    object:
+    {
+        base: "foo",
+        unquoted_keys: "hello",
+        unquoted_strings: string,
+        another: "unquoted_string", // unquoted strings cannot contain whitespace
+        hex: 0xff,
+        
+        sub_object:
+        {
+            one: "1",
+            two: "2"
+        }
+    },
+    
+    /*
+    Allow multi-line comments
+    block:
+    {
+        key: "a",
+        vakue: "pair"
+    }
+    */
+    
+    new_object:
+    {
+        // inheritance
+        jsn_inherit: ["object"],
+        
+        base: "bar (overrides hello)",
+        
+        sub_object:
+        {
+            three: "3"
+        }
+        
+    }, // allow trailing commas
+}
 
 ```
+
+## Output JSON
+
+```json
+{
+    "json": {
+        "array": [
+            1,
+            2,
+            3
+        ],
+        "bool": true,
+        "int": 0,
+        "float": 1.0
+    },
+    "object": {
+        "base": "foo",
+        "unquoted_keys": "hello",
+        "unquoted_strings": "string",
+        "another": "unquoted_string",
+        "hex": 255,
+        "sub_object": {
+            "one": "1",
+            "two": "2"
+        }
+    },
+    "new_object": {
+        "base": "bar(overrideshello)",
+        "sub_object": {
+            "three": "3",
+            "one": "1",
+            "two": "2"
+        },
+        "unquoted_keys": "hello",
+        "unquoted_strings": "string",
+        "another": "unquoted_string",
+        "hex": 255
+    }
+}
+```
+
