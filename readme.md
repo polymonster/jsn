@@ -59,7 +59,7 @@ json_dict = jsn.loads(open("jsn_file.jsn", "r).read())
     block:
     {
         key: "a",
-        vakue: "pair"
+        value: "pair"
     }
     */
     
