@@ -44,7 +44,7 @@ json_dict = jsn.loads(open("jsn_file.jsn", "r).read())
         base: "foo",
         unquoted_keys: "hello",
         unquoted_strings: string,
-        another: "unquoted_string", // unquoted strings cannot contain whitespace
+        another: unquoted_string, // unquoted strings cannot contain whitespace
         hex: 0xff,
         
         sub_object:
