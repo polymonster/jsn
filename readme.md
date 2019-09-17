@@ -2,7 +2,7 @@
 
 A simple json-like syntax that is processed and converted to compliant json through a single python script. The intention of this project is to provide a more user friendly and lenient language than json that can directly be plugged into existing languages or libraries which support fully complient json.
 
-There are other json variants such as json5 that achieve the same goal but I wanted a simple and minimal drop in replacement that did not require pip for python or installation processes for other languages. jsn can be used anywhere you use json by simply including jsn.py into your pipelines and converting to json as a pre-process step.
+There are other json variants such as json5 that achieve the same goal but I wanted a simple and minimal drop in replacement that did not require pip for python or installation processes for other languages. jsn can be used anywhere you use json by simply including jsn.py into your pipelines and converting to json as a pre-process step and used in python the same way using jsn.loads.
 
 ## Usage
 
