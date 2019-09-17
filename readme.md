@@ -27,6 +27,9 @@ dict = jsn.loads(open("jsn_file.jsn", "r).read())
 {         
     // allow comments
     
+    // include files (relative to current working directory)
+    jsn_include: ["include_file.jsn"],
+    
     // standard json
     "json":
     {
