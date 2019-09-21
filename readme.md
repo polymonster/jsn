@@ -11,7 +11,7 @@ python3 jsn.py -i <list of input files or directories> -o <output file or direct
 Use in python as dict just like json:
 
 ```python
-import jsn.jsn as jsn
+import jsn
 json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
 ```
 
