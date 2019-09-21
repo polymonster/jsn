@@ -15,7 +15,7 @@ import jsn.jsn as jsn
 json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
 ```
 
-## Example
+## Example .jsn
 
 ```c++
 // syntax highlights nicely in most text editors with c++
@@ -76,7 +76,7 @@ json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
 
 ```
 
-## Output JSON
+## Output json from .jsn
 
 ```json
 {
