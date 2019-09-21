@@ -269,7 +269,7 @@ def loads(jsn):
     # validate
     try:
         j = json.loads(jsn)
-    except json.decoder.jsondecodeerror:
+    except:
         jsn_lines = jsn.split("\n")
         for l in range(0, len(jsn_lines)):
             print(str(l+1) + " " + jsn_lines[l])
