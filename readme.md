@@ -1,7 +1,5 @@
 # jsn
 
-## Usage
-
 Write .jsn files and convert them to json then pass the compliant json code to any other tools and languages:
 
 ```
