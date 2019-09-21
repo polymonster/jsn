@@ -1,22 +1,18 @@
 # jsn
 
-A simple json-like syntax that is processed and converted to compliant json through a single python script. The intention of this project is to provide a more user friendly and lenient language than json that can directly be plugged into existing languages or libraries which support fully complient json.
-
-There are other json variants such as json5 that achieve the same goal but I wanted a simple and minimal drop in replacement that did not require pip for python or installation processes for other languages. jsn can be used anywhere you use json by simply including jsn.py into your pipelines and converting to json as a pre-process step and used in python the same way using jsn.loads.
-
 ## Usage
 
 Write .jsn files and convert them to json then pass the compliant json code to any other tools and languages:
 
 ```
-python3 jsn.py -i <list of input files or directories> -o <output directory>
+python3 jsn.py -i <list of input files or directories> -o <output file or directory>
 ```
 
 Use in python as dict just like json:
 
 ```python
-import jsn
-json_dict = jsn.loads(open("jsn_file.jsn", "r).read())
+import jsn.jsn as jsn
+json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
 ```
 
 ## Example
