@@ -281,7 +281,6 @@ def loads(jsn):
 
     # inherit
     inherit_dict_recursive(j, j)
-
     return j
 
 
