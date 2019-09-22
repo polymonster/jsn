@@ -108,6 +108,7 @@ def clean_src(jsn):
 
 # remove comments, taken from polymonster/stub-format/stub_format.py ()
 def remove_comments(file_data):
+    string_literal = ["\"", "'"]
     lines = file_data.split("\n")
     inside_block = False
     conditioned = ""
@@ -121,6 +122,22 @@ def remove_comments(file_data):
                 continue
         cpos = line.find("//")
         mcpos = line.find("/*")
+
+        #ignore inside quotes
+        cur_literal = ""
+        literal_sp = -1
+        for c in range(0, len(line)):
+            if line[c] in string_literal:
+                if cur_literal == line[c]:
+                    cur_literal = ""
+                    if literal_sp <= cpos < c:
+                        cpos = -1
+                    if literal_sp <= mcpos < c:
+                        mcpos = -1
+                else:
+                    cur_literal = line[c]
+                    literal_sp = c
+
         if cpos != -1:
             conditioned += line[:cpos] + "\n"
         elif mcpos != -1:
