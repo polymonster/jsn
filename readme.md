@@ -1,7 +1,5 @@
 # jsn
 
-## Usage
-
 Write .jsn files and convert them to json then pass the compliant json code to any other tools and languages:
 
 ```
@@ -11,7 +9,7 @@ python3 jsn.py -i <list of input files or directories> -o <output file or direct
 Use in python as dict just like json:
 
 ```python
-import jsn.jsn as jsn
+import jsn
 json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
 ```
 
