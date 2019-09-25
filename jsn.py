@@ -76,7 +76,10 @@ def format(jsn, indent=4):
     id = ["{", "["]
     fmt = ""
     cur_indent = 0
+    inside_quotes = False
     for char in jsn:
+        if char == "\"":
+            inside_quotes = not inside_quotes
         if char in el:
             fmt += "\n"
             cur_indent -= 4
@@ -89,7 +92,7 @@ def format(jsn, indent=4):
                 cur_indent += 4
             for i in range(0, cur_indent):
                 fmt += " "
-        if char == ":":
+        if char == ":" and not inside_quotes:
             fmt += " "
     return fmt
 
@@ -101,7 +104,10 @@ def clean_src(jsn):
     for char in jsn:
         if char == '\"':
             inside_quotes = not inside_quotes
-        strip_char = char.strip()
+        if not inside_quotes:
+            strip_char = char.strip()
+        else:
+            strip_char = char
         clean += strip_char
     return clean
 
@@ -186,6 +192,17 @@ def get_value_type(value):
     return "string"
 
 
+# return 0 for opening or 1 for closing
+def quoteType(jsn, q):
+    open = False
+    for c in range(0, q):
+        if jsn[c] == "\"":
+            open = not open
+    if open:
+        return 1
+    return 0
+
+
 # add quotes to unquoted keys
 def quote_keys(jsn):
     delimiters = [",", "{"]
@@ -197,6 +214,15 @@ def quote_keys(jsn):
         if pos == -1:
             quoted += jsn[cur:]
             break
+        # ignore ':' inside quotes
+        pq = jsn[:pos].rfind("\"")
+        nq = jsn.find("\"", pos)
+        if pq != -1 and nq != -1:
+            if quoteType(jsn, pq) == 0:
+                if pq < pos < nq:
+                    quoted += jsn[cur:nq + 1]
+                    pos = nq+1
+                    continue
         delim = 0
         for d in delimiters:
             dd = jsn[:pos].rfind(d)
