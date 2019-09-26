@@ -203,26 +203,57 @@ def quoteType(jsn, q):
     return 0
 
 
+# check whether char jsn[pos] is inside quotes or not
+def is_inside_quotes(str_list, pos):
+    for s in str_list:
+        if pos < s[0]:
+            break
+        if s[0] < pos < s[1]:
+            return s[1]+1
+    return 0
+
+
+# find strings
+def find_strings(jsn):
+    quote_types = ["\"", "'"]
+    oq = ""
+    prev_char = ""
+    istart = -1
+    str_list = []
+    for ic in range(0, len(jsn)):
+        c = jsn[ic]
+        if c in quote_types:
+            if oq == "":
+                oq = c
+                istart = ic
+            elif oq == c and prev_char != "\\":
+                oq = ""
+                str_list.append((istart, ic+1))
+        if prev_char == "\\" and c == "\\":
+            prev_char = ""
+        else:
+            prev_char = c
+    return str_list
+
+
 # add quotes to unquoted keys
 def quote_keys(jsn):
     delimiters = [",", "{"]
     pos = 0
     quoted = ""
+    str_list = find_strings(jsn)
     while True:
         cur = pos
         pos = jsn.find(":", pos)
         if pos == -1:
             quoted += jsn[cur:]
             break
-        # ignore ':' inside quotes
-        pq = jsn[:pos].rfind("\"")
-        nq = jsn.find("\"", pos)
-        if pq != -1 and nq != -1:
-            if quoteType(jsn, pq) == 0:
-                if pq < pos < nq:
-                    quoted += jsn[cur:nq + 1]
-                    pos = nq+1
-                    continue
+        # ignore : inside quotes
+        iq = is_inside_quotes(str_list, pos)
+        if iq:
+            quoted += jsn[cur:iq]
+            pos = iq
+            continue
         delim = 0
         for d in delimiters:
             dd = jsn[:pos].rfind(d)
