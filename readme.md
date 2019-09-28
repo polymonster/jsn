@@ -48,6 +48,7 @@ json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
         binary: 0b10011,
         
         // inheritance below..
+        base: "foo",
         sub_object:
         {
             one: "1",
@@ -58,13 +59,23 @@ json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
     derrived_object:
     {
         // inheritance
-        jsn_inherit: ["object"],
+        jsn_inherit: ["unquoted_keys"],
         
-        base: "bar (overrides hello)",
+        // adds keys
+        // unquoted_strings: string,
+        // another: unquoted_string,
+        // hex: 0xff,
+        // binary: 0b10011,
         
+        // overrides foo
+        base: "bar",
+        
+        // merges sub-object
         sub_object:
         {
             three: "3"
+            // one: "1",
+            // two: "2"
         }
         
     }, // allow trailing commas
