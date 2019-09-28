@@ -1,6 +1,6 @@
 # jsn
 
-Write .jsn files and convert them to json then pass the compliant json code to any other tools and languages:
+Write .jsn files and jsn.py will convert them to json so you can pass the compliant json code to any other tools and languages which support it:
 
 ```
 python3 jsn.py -i <list of input files or directories> -o <output file or directory>
