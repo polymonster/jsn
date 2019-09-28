@@ -21,8 +21,14 @@ json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
 {         
     // allow comments
     
-    // include files (relative to current working directory)
-    jsn_include: ["include_file.jsn"],
+    /*
+    Allow multi-line comments
+    block:
+    {
+        key: "a",
+        vakue: "pair"
+    }
+    */
     
     // standard json
     "json":
@@ -33,14 +39,15 @@ json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
         "float": 1.0
     },
     
-    object:
+    // friendly jsn
+    unquoted_keys:
     {
-        base: "foo",
-        unquoted_keys: "hello",
         unquoted_strings: string,
         another: unquoted_string, // unquoted strings cannot contain whitespace
         hex: 0xff,
+        binary: 0b10011,
         
+        // inheritance below..
         sub_object:
         {
             one: "1",
@@ -48,16 +55,7 @@ json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
         }
     },
     
-    /*
-    Allow multi-line comments
-    block:
-    {
-        key: "a",
-        value: "pair"
-    }
-    */
-    
-    new_object:
+    derrived_object:
     {
         // inheritance
         jsn_inherit: ["object"],
@@ -88,28 +86,24 @@ json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
         "int": 0,
         "float": 1.0
     },
-    "object": {
-        "base": "foo",
-        "unquoted_keys": "hello",
+    "unquoted_keys": {
         "unquoted_strings": "string",
         "another": "unquoted_string",
         "hex": 255,
+        "binary": 19,
         "sub_object": {
             "one": "1",
             "two": "2"
         }
     },
-    "new_object": {
-        "base": "bar(overrideshello)",
+    "derrived_object": {
+        "jsn_inherit": [
+            "object"
+        ],
+        "base": "bar (overrides hello)",
         "sub_object": {
-            "three": "3",
-            "one": "1",
-            "two": "2"
-        },
-        "unquoted_keys": "hello",
-        "unquoted_strings": "string",
-        "another": "unquoted_string",
-        "hex": 255
+            "three": "3"
+        }
     }
 }
 ```
