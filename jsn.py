@@ -97,6 +97,39 @@ def format(jsn, indent=4):
     return fmt
 
 
+# check whether char jsn[pos] is inside quotes or not
+def is_inside_quotes(str_list, pos):
+    for s in str_list:
+        if pos < s[0]:
+            break
+        if s[0] < pos < s[1]:
+            return s[1]+1
+    return 0
+
+
+# find strings
+def find_strings(jsn):
+    quote_types = ["\"", "'"]
+    oq = ""
+    prev_char = ""
+    istart = -1
+    str_list = []
+    for ic in range(0, len(jsn)):
+        c = jsn[ic]
+        if c in quote_types:
+            if oq == "":
+                oq = c
+                istart = ic
+            elif oq == c and prev_char != "\\":
+                oq = ""
+                str_list.append((istart, ic+1))
+        if prev_char == "\\" and c == "\\":
+            prev_char = ""
+        else:
+            prev_char = c
+    return str_list
+
+
 # remove whitespace and newlines to simply subsequent ops
 def clean_src(jsn):
     clean = ""
@@ -114,11 +147,11 @@ def clean_src(jsn):
 
 # remove comments, taken from polymonster/stub-format/stub_format.py ()
 def remove_comments(file_data):
-    string_literal = ["\"", "'"]
     lines = file_data.split("\n")
     inside_block = False
     conditioned = ""
     for line in lines:
+        str_list = find_strings(line)
         if inside_block:
             ecpos = line.find("*/")
             if ecpos != -1:
@@ -129,20 +162,11 @@ def remove_comments(file_data):
         cpos = line.find("//")
         mcpos = line.find("/*")
 
-        #ignore inside quotes
-        cur_literal = ""
-        literal_sp = -1
-        for c in range(0, len(line)):
-            if line[c] in string_literal:
-                if cur_literal == line[c]:
-                    cur_literal = ""
-                    if literal_sp <= cpos < c:
-                        cpos = -1
-                    if literal_sp <= mcpos < c:
-                        mcpos = -1
-                else:
-                    cur_literal = line[c]
-                    literal_sp = c
+        if is_inside_quotes(str_list, mcpos):
+            mcpos = -1
+
+        if is_inside_quotes(str_list, cpos):
+            cpos = -1
 
         if cpos != -1:
             conditioned += line[:cpos] + "\n"
@@ -184,6 +208,12 @@ def get_value_type(value):
                 return "hex"
             except ValueError:
                 pass
+        if value.find("0b") != -1:
+            try:
+                int(value[2:], 2)
+                return "binary"
+            except ValueError:
+                pass
         try:
             int(value)
             return "int"
@@ -192,37 +222,24 @@ def get_value_type(value):
     return "string"
 
 
-# return 0 for opening or 1 for closing
-def quoteType(jsn, q):
-    open = False
-    for c in range(0, q):
-        if jsn[c] == "\"":
-            open = not open
-    if open:
-        return 1
-    return 0
-
-
 # add quotes to unquoted keys
 def quote_keys(jsn):
     delimiters = [",", "{"]
     pos = 0
     quoted = ""
+    str_list = find_strings(jsn)
     while True:
         cur = pos
         pos = jsn.find(":", pos)
         if pos == -1:
             quoted += jsn[cur:]
             break
-        # ignore ':' inside quotes
-        pq = jsn[:pos].rfind("\"")
-        nq = jsn.find("\"", pos)
-        if pq != -1 and nq != -1:
-            if quoteType(jsn, pq) == 0:
-                if pq < pos < nq:
-                    quoted += jsn[cur:nq + 1]
-                    pos = nq+1
-                    continue
+        # ignore : inside quotes
+        iq = is_inside_quotes(str_list, pos)
+        if iq:
+            quoted += jsn[cur:iq]
+            pos = iq
+            continue
         delim = 0
         for d in delimiters:
             dd = jsn[:pos].rfind(d)
@@ -243,6 +260,10 @@ def quote_keys(jsn):
         if get_value_type(value) == "hex":
             hex_value = int(value[2:], 16)
             quoted += str(hex_value)
+            pos = next
+        if get_value_type(value) == "binary":
+            bin_value = int(value[2:], 2)
+            quoted += str(bin_value)
             pos = next
     return quoted
 

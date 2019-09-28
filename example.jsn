@@ -1,30 +1,6 @@
 {         
     // allow comments
     
-    // standard json
-    "json":
-    {
-        "array": [1, 2, 3],
-        "bool": true,
-        "int": 0,
-        "float": 1.0
-    },
-    
-    object:
-    {
-        base: "foo",
-        unquoted_keys: "hello",
-        unquoted_strings: string,
-        another: "unquoted_string", // unquoted strings cannot contain whitespace
-        hex: 0xff,
-        
-        sub_object:
-        {
-            one: "1",
-            two: "2"
-        }
-    },
-    
     /*
     Allow multi-line comments
     block:
@@ -34,7 +10,32 @@
     }
     */
     
-    new_object:
+    // standard json
+    "json":
+    {
+        "array": [1, 2, 3],
+        "bool": true,
+        "int": 0,
+        "float": 1.0
+    },
+    
+    // friendly jsn
+    unquoted_keys:
+    {
+        unquoted_strings: string,
+        another: unquoted_string, // unquoted strings cannot contain whitespace
+        hex: 0xff,
+        binary: 0b10011,
+        
+        // inheritance below..
+        sub_object:
+        {
+            one: "1",
+            two: "2"
+        }
+    },
+    
+    derrived_object:
     {
         // inheritance
         jsn_inherit: ["object"],
