@@ -208,6 +208,12 @@ def get_value_type(value):
                 return "hex"
             except ValueError:
                 pass
+        if value.find("0b") != -1:
+            try:
+                int(value[2:], 2)
+                return "binary"
+            except ValueError:
+                pass
         try:
             int(value)
             return "int"
@@ -254,6 +260,10 @@ def quote_keys(jsn):
         if get_value_type(value) == "hex":
             hex_value = int(value[2:], 16)
             quoted += str(hex_value)
+            pos = next
+        if get_value_type(value) == "binary":
+            bin_value = int(value[2:], 2)
+            quoted += str(bin_value)
             pos = next
     return quoted
 
