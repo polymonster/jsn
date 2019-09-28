@@ -102,19 +102,23 @@ json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
         "another": "unquoted_string",
         "hex": 255,
         "binary": 19,
+        "base": "foo",
         "sub_object": {
             "one": "1",
             "two": "2"
         }
     },
     "derrived_object": {
-        "jsn_inherit": [
-            "object"
-        ],
-        "base": "bar (overrides hello)",
+        "base": "bar",
         "sub_object": {
-            "three": "3"
-        }
+            "three": "3",
+            "one": "1",
+            "two": "2"
+        },
+        "unquoted_strings": "string",
+        "another": "unquoted_string",
+        "hex": 255,
+        "binary": 19
     }
 }
 ```
