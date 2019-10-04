@@ -254,6 +254,8 @@ def quote_keys(jsn):
         quoted += ":"
         pos += 1
         next = find_first(jsn, pos, [",", "]", "}"])
+        while is_inside_quotes(str_list, next):
+            next = find_first(jsn, next+1, [",", "]", "}"])
         value = jsn[pos:next]
         if get_value_type(value) == "string":
             value = in_quotes(value)

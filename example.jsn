@@ -23,7 +23,7 @@
     unquoted_keys:
     {
         unquoted_strings: string,
-        another: unquoted_string, // unquoted strings cannot contain whitespace
+        another: unquoted_string, // unquoted strings cannot contain whitespace or special chars
         hex: 0xff,
         binary: 0b10011,
         
@@ -33,7 +33,7 @@
         {
             one: "1",
             two: "2"
-        }
+        }, // allow trailing commas
     },
     
     derrived_object:
@@ -57,6 +57,7 @@
             // one: "1",
             // two: "2"
         }
-        
-    }, // allow trailing commas
+    },
+    
+    str_test: "b:[{}]," // this tests ignoring special chars inside quotes
 }
