@@ -76,10 +76,12 @@ def format(jsn, indent=4):
     id = ["{", "["]
     fmt = ""
     cur_indent = 0
-    inside_quotes = False
-    for char in jsn:
-        if char == "\"":
-            inside_quotes = not inside_quotes
+    str_list = find_strings(jsn)
+    for c in range(0, len(jsn)):
+        char = jsn[c]
+        if is_inside_quotes(str_list, c):
+            fmt += char
+            continue
         if char in el:
             fmt += "\n"
             cur_indent -= 4
@@ -92,7 +94,7 @@ def format(jsn, indent=4):
                 cur_indent += 4
             for i in range(0, cur_indent):
                 fmt += " "
-        if char == ":" and not inside_quotes:
+        if char == ":":
             fmt += " "
     return fmt
 
