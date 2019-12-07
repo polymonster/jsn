@@ -31,7 +31,7 @@ json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
 For usage in langauges other than python you can convert jsn to json using the commandline.
 
 ```
-python3 jsn.py -i <list of input files or directories> -o <output file or directory>
+python3 jsn.py -i example.jsn -o example.json
 ```
 
 ```
