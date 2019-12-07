@@ -34,6 +34,18 @@ For usage in langauges other than python you can convert jsn to json using the c
 python3 jsn.py -i <list of input files or directories> -o <output file or directory>
 ```
 
+```
+python3 jsn.py -help
+--------------------------------------------------------------------------------
+jsn ----------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+commandline arguments:
+    -help display this message
+    -i list of input files or directories to process
+    -o output file or directory 
+    -p print output to console 
+```
+
 ## Example .jsn
 
 ```c++
