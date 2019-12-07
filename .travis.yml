@@ -5,5 +5,5 @@ install:
   - pip install --user codecov
 script:
   - python3 jsn.py -i example.jsn -o test.json
- after_success:
+after_success:
   - codecov
