@@ -8,16 +8,14 @@ If you are using hand edited json in any projects currently, jsn will easily int
 
 # Feature Summary
 
-- quoteless keys.
-- quoteless strings.
-- single quotes.
-- single and multi-line comments.
-- includes / file import.
-- inheritance (hierarchicle and multiple).
-- multi-line strings / line breaks.
-- hex.
-- binary.
-- leading and trailing decimal in floats.
+- Quoteless keys.
+- Quoteless strings.
+- Single quotes.
+- Single and multi-line comments.
+- Includes / file import.
+- Inheritance (hierarchicle and multiple).
+- Multi-line strings / line breaks.
+- Hex, binary, postive sign, improve float syntax.
 
 # Python API
 
