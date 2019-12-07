@@ -1,13 +1,16 @@
-# lightweight json format without the need for quotes, allowing comments and more
+# lightweight json format without the need for quotes, allowing comments, file importing, inheritence and more
 import json
 import sys
 import os
 import traceback
+import re
+
 
 # build info for jobs
 class build_info:
     inputs = []
     output_dir = ""
+    print_out = False
 
 
 # do c like (u32)-1
@@ -58,6 +61,8 @@ def parse_args():
             i = j
         if sys.argv[i] == "-o":
             info.output_dir = sys.argv[i + 1]
+        if sys.argv[i] == "-p":
+            info.print_out = True
     return info
 
 
@@ -66,7 +71,8 @@ def display_help():
     print("commandline arguments:")
     print("    -help display this message")
     print("    -i list of input files or directories to process")
-    print("    -o output directory")
+    print("    -o output file or directory ")
+    print("    -p print output to console ")
 
 
 # python json style dumps
@@ -124,7 +130,7 @@ def find_strings(jsn):
                 istart = ic
             elif oq == c and prev_char != "\\":
                 oq = ""
-                str_list.append((istart, ic+1))
+                str_list.append((istart, ic))
         if prev_char == "\\" and c == "\\":
             prev_char = ""
         else:
@@ -180,6 +186,42 @@ def remove_comments(file_data):
     return conditioned
 
 
+# change single quotes to double quotes to support json5
+def change_quotes(jsn):
+    str_list = find_strings(jsn)
+    conditioned = ""
+    for c in range(0, len(jsn)):
+        char = jsn[c]
+        if char == "\"":
+            if is_inside_quotes(str_list, c):
+                conditioned += "\\\""
+                continue
+        if char == "'":
+            if not is_inside_quotes(str_list, c):
+                conditioned += "\""
+                continue
+        conditioned += char
+    return conditioned
+
+
+# remove line breaks within strings
+def collapse_line_breaks(jsn):
+    str_list = find_strings(jsn)
+    conditioned = ""
+    skip = False
+    for c in range(0, len(jsn)):
+        char = jsn[c]
+        if skip:
+            skip = False
+            continue
+        if char == "\\" and c+1 < len(jsn) and jsn[c+1] == "\n":
+            if is_inside_quotes(str_list, c):
+                skip = True
+                continue
+        conditioned += char
+    return conditioned
+
+
 # find first char in chars in string from pos
 def find_first(string, pos, chars):
     first = us(-1)
@@ -224,6 +266,19 @@ def get_value_type(value):
     return "string"
 
 
+# find inherits inside unquoted objects - key(inherit_a, inherit_b)
+def get_inherits(object_key):
+    if object_key[0] == "\"":
+        return object_key, []
+    bp = object_key.find("(")
+    if bp != -1:
+        ep = object_key.find(")")
+        i = object_key[bp+1:ep]
+        ii = i.split(",")
+        return object_key[:bp], ii
+    return object_key, []
+
+
 # add quotes to unquoted keys
 def quote_keys(jsn):
     delimiters = [",", "{"]
@@ -248,26 +303,67 @@ def quote_keys(jsn):
             if dd != -1:
                 delim = max(dd, delim)
         key = jsn[delim+1:pos].strip()
-        qkey = in_quotes(key)
-        quoted += jsn[cur:delim+1]
-        quoted += qkey
-        quoted += ":"
+        # make sure we arent inside brackets, for multiple inheritence
+        if key.find(")") != -1:
+            bp = us(jsn[:pos].rfind("("))
+            ep = jsn.find(")", delim)
+            if bp < delim < ep:
+                delim = 0
+                for d in delimiters:
+                    dd = jsn[:bp].rfind(d)
+                    if dd != -1:
+                        delim = max(dd, delim)
+            key = jsn[delim + 1:pos].strip()
         pos += 1
         next = find_first(jsn, pos, [",", "]", "}"])
         while is_inside_quotes(str_list, next):
             next = find_first(jsn, next+1, [",", "]", "}"])
+        # put key in quotes
         value = jsn[pos:next]
+        inherit = ""
+        if get_value_type(value) == "object":
+            inherit = "{"
+            pos += 1
+            key, inherit_list = get_inherits(key)
+            if len(inherit_list) > 0:
+                inherit += in_quotes("jsn_inherit") + ": ["
+                p = 0
+                for i in inherit_list:
+                    if p > 0:
+                        inherit += ", "
+                    inherit += in_quotes(i.strip())
+                    p += 1
+                inherit += "],"
+        qkey = in_quotes(key)
+        quoted += jsn[cur:delim+1]
+        quoted += qkey
+        quoted += ":"
+        quoted += inherit
         if get_value_type(value) == "string":
             value = in_quotes(value)
             quoted += value
             pos = next
-        if get_value_type(value) == "hex":
+        elif get_value_type(value) == "hex":
             hex_value = int(value[2:], 16)
             quoted += str(hex_value)
             pos = next
-        if get_value_type(value) == "binary":
+        elif get_value_type(value) == "binary":
             bin_value = int(value[2:], 2)
             quoted += str(bin_value)
+            pos = next
+        elif get_value_type(value) == "float":
+            f = value
+            if f[0] == ".":
+                f = "0" + f
+            elif f[len(f)-1] == ".":
+                f = f + "0"
+            quoted += f
+            pos = next
+        elif get_value_type(value) == "int":
+            i = value
+            if i[0] == "+":
+                i = i[1:]
+            quoted += i
             pos = next
     return quoted
 
@@ -300,38 +396,40 @@ def inherit_dict(dest, second):
 
 # recursively merge dicts
 def inherit_dict_recursive(d, d2):
+    inherits = []
     for k, v in d.items():
         if k == "jsn_inherit":
-            if type(v) == list:
-                for i in v:
-                    if i in d2.keys():
-                        inherit_dict(d, d2[i])
-                        d.pop("jsn_inherit", None)
-                        return
-            else:
-                print("jsn error: jsn_inherit must be an array of keys to inherit")
+            for i in v:
+                inherits.append(i)
+    if "jsn_inherit" in d.keys():
+        d.pop("jsn_inherit", None)
+        for i in inherits:
+            if i in d2.keys():
+                inherit_dict(d, d2[i])
+    for k, v in d.items():
         if type(v) == dict:
             inherit_dict_recursive(v, d)
 
 
-# add jsn includes
-def add_jsn_includes(j):
-    if "jsn_include" in j.keys():
-        if type(j["jsn_include"]) == list:
-            for i in j["jsn_include"]:
-                include_dict = loads(open(i, "r").read())
-                inherit_dict(j, include_dict)
-        else:
-            print("jsn error: jsn_include must be an array of files to include")
-    return j
+def get_imports(jsn):
+    imports = []
+    bp = jsn.find("{")
+    head = jsn[:bp].split("\n")
+    for i in head:
+        if i.find("import") != -1:
+            imports.append(i[len("import"):].strip())
+    return jsn[bp:], imports
 
 
 # convert jsn to json
 def loads(jsn):
+    jsn, imports = get_imports(jsn)
     jsn = remove_comments(jsn)
+    jsn = change_quotes(jsn)
+    jsn = collapse_line_breaks(jsn)
     jsn = clean_src(jsn)
-    jsn = remove_trailing_commas(jsn)
     jsn = quote_keys(jsn)
+    jsn = remove_trailing_commas(jsn)
     jsn = format(jsn)
 
     # validate
@@ -344,20 +442,24 @@ def loads(jsn):
         traceback.print_exc()
         exit(1)
 
-    # include
-    add_jsn_includes(j)
+    # import
+    for i in imports:
+        include_dict = loads(open(i, "r").read())
+        inherit_dict(j, include_dict)
 
     # inherit
     inherit_dict_recursive(j, j)
     return j
 
 
-# convert jsn to json and
-def convert_jsn(input_file, output_file):
+# convert jsn to json and write to a file
+def convert_jsn(info, input_file, output_file):
     print("converting: " + input_file + " to " + output_file)
     file = open(input_file, "r")
     output_file = open(output_file, "w+")
     jdict = loads(file.read())
+    if info.print_out:
+        print(json.dumps(jdict, indent=4))
     output_file.write(json.dumps(jdict, indent=4))
     output_file.close()
     file.close()
@@ -381,11 +483,11 @@ if __name__ == "__main__":
                         output_file = os.path.join(info.output_dir, file)
                         output_file = change_ext(output_file, ".json")
                         create_dir(output_file)
-                    convert_jsn(os.path.join(root, file), output_file)
+                    convert_jsn(info, os.path.join(root, file), output_file)
         else:
             output_file = info.output_dir
             if not is_file(output_file):
                 output_file = os.path.join(info.output_dir, i)
                 output_file = change_ext(output_file, ".json")
                 create_dir(output_file)
-            convert_jsn(i, output_file)
+            convert_jsn(info, i, output_file)

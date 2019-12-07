@@ -1,31 +1,44 @@
+import import.jsn
 {         
     // allow comments
     
     /*
-    Allow multi-line comments
-    block:
-    {
-        key: "a",
-        vakue: "pair"
-    }
+    multi-
+    line 
+    comments
     */
     
-    // standard json
+    //		tabs and any whitespace allowed
+
+    // compatible with json
     "json":
     {
-        "array": [1, 2, 3],
         "bool": true,
-        "int": 0,
-        "float": 1.0
+        "int": 1,
+        "float": 1.0,
+        "string": "yes",
+        "array": [1, 2, 3]
     },
     
-    // friendly jsn
-    unquoted_keys:
+    // compatible with json5
+    json5:
     {
-        unquoted_strings: string,
-        another: unquoted_string, // unquoted strings cannot contain whitespace or special chars
-        hex: 0xff,
+        unquoted: 'and you can quote me on that',
+        single_quotes: 'I can use "double quotes" here',
+        hexadecimal: 0xdecaf,
+        line_breaks: "Look, Mom! No \
+\\n's!",
+  		leading_decimal_point: .8675309, and_trailing: 8675309.,
+  		positive_sign: +1,
+  		trailing_comma: 'in objects', and_in: ['arrays',],
+    },
+    
+    // jsn features
+    jsn:
+    {
+        unquoted_string: without_whitespace, // cannot contain whitespace or special chars (see str_test)
         binary: 0b10011,
+        binary_shift: 1<<16,
         
         // inheritance below..
         base: "foo",
@@ -36,21 +49,18 @@
         }, // allow trailing commas
     },
     
-    derrived_object:
-    {
-        // inheritance
-        jsn_inherit: ["unquoted_keys"],
+    inheritence(jsn): // add object name to inherit inside brackets
+    {        
+        // inheritance adds keys from jsn object
         
-        // adds keys
-        // unquoted_strings: string,
-        // another: unquoted_string,
-        // hex: 0xff,
+        // unquoted_string: without_whitespace,
         // binary: 0b10011,
+        // binary_shift: 1<<16,
         
-        // overrides foo
+        // duplicated keys are overridden by the derived object
         base: "bar",
         
-        // merges sub-object
+        // inheritance on sub-objects continues recursively
         sub_object:
         {
             three: "3"
@@ -59,5 +69,14 @@
         }
     },
     
-    str_test: "b:[{}]," // this tests ignoring special chars inside quotes
+    // multiple and hierarchical inheritance
+    objb: { b: "b" },
+    
+    multiple_inheritence(inheritence, objb):
+    {
+    	c: "c"
+    },
+    
+    //**
+    str_test: ":[{}]'+.,0b0x" // this tests ignoring special chars inside quotes
 }
