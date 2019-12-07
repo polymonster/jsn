@@ -1,5 +1,7 @@
 import import.jsn
-{         
+{   
+	// sytax highlights quite nicely in most editors with c or c++ syntax      
+	
     // allow comments
     
     /*
