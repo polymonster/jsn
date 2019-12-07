@@ -3,7 +3,8 @@ python:
   - "3.6"
 install:
   - pip install codecov
+  - pip install coverage
 script:
-  - python3 jsn.py -i example.jsn -o test.json
+  - coverage run jsn.py -i example.jsn -o test.json
 after_success:
   - codecov
