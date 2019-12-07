@@ -1,4 +1,5 @@
 # jsn
+[![Build Status](https://travis-ci.org/polymonster/jsn.svg?branch=master)](https://travis-ci.org/polymonster/jsn)
 
 jsn is a user-friendly data format that can be edited by humans by improving some of the common mistakes that occur when using standard json. 
 
