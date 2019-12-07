@@ -52,7 +52,7 @@ commandline arguments:
 ```c++
 import import.jsn
 {   
-	// sytax highlights quite nicely in most editors with c or c++ syntax      
+    // sytax highlights quite nicely in most editors with c or c++ syntax      
 	
     // allow comments
     
@@ -82,9 +82,9 @@ import import.jsn
         hexadecimal: 0xdecaf,
         line_breaks: "Look, Mom! No \
 \\n's!",
-  		leading_decimal_point: .8675309, and_trailing: 8675309.,
-  		positive_sign: +1,
-  		trailing_comma: 'in objects', and_in: ['arrays',],
+	leading_decimal_point: .8675309, and_trailing: 8675309.,
+	positive_sign: +1,
+	trailing_comma: 'in objects', and_in: ['arrays',],
     },
     
     // jsn features
