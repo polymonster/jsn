@@ -19,25 +19,16 @@ If you are using hand edited json in any projects currently, jsn will easily int
 - Multi-line strings / line breaks.
 - Hex, binary, bit shifts, int and float improvements.
 
-# Python API
-
-The python API mirrors json, you can use jsn just like json as a python dictionary.
-
-```python
-import jsn
-json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
-```
-
 # CLI
 
-For usage in langauges other than python you can convert jsn to json using the commandline.
+You can convert jsn to json using the commandline, clone this repository and add jsn to your path.
 
 ```
-python3 jsn.py -i example.jsn -o example.json
+jsn -i example.jsn -o example.json
 ```
 
 ```
-python3 jsn.py -help
+jsn -help
 --------------------------------------------------------------------------------
 jsn ----------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -46,6 +37,15 @@ commandline arguments:
     -i list of input files or directories to process
     -o output file or directory 
     -p print output to console 
+```
+
+# Python API
+
+jsn can be used just like json as a python dictionary.
+
+```python
+import jsn
+json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
 ```
 
 ## Example .jsn
