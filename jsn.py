@@ -351,6 +351,8 @@ def quote_keys(jsn):
             contents = jsn[pos+1:end-1].strip().split(",")
             quoted_contents = "["
             for item in contents:
+                if len(item) == 0:
+                    continue
                 if get_value_type(item) == "string":
                     quoted_contents += in_quotes(item)
                 else:
