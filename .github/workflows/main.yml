@@ -1,4 +1,4 @@
-name: Build Package
+name: build-pkg
 on: push
 jobs:
   build-n-publish:
@@ -16,6 +16,9 @@ jobs:
           pip install
           pep517
           --user
+      - name: Setup package
+        run: >-
+          cp jsn.py _init_.py
       - name: Build a binary wheel and a source tarball
         run: >-
           python -m
