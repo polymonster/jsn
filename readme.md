@@ -180,8 +180,7 @@ import import.jsn
         "positive_sign": 1,
         "trailing_comma": "in objects",
         "and_in": [
-            "arrays",
-            ""
+            "arrays"
         ]
     },
     "jsn": {
