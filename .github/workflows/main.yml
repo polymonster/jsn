@@ -1,4 +1,4 @@
-name: Build Package
+name: build-pkg
 on: push
 jobs:
   build-n-publish:
