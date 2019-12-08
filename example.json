@@ -20,17 +20,30 @@
         "positive_sign": 1,
         "trailing_comma": "in objects",
         "and_in": [
-            "arrays"
+            "arrays",
+            ""
         ]
     },
     "jsn": {
         "unquoted_string": "without_whitespace",
-        "binary": 19,
-        "binary_shift": "1<<16",
+        "unquoted": [
+            "strings",
+            "in",
+            "arrays"
+        ],
+        "binary_literal": 19,
+        "bit_shifts": 65792,
+        "variable_data_path": "path/to/data/subdir",
+        "variable_int": 10,
+        "array_of_vars": [
+            "path/to/data",
+            "hello"
+        ],
         "base": "foo",
         "sub_object": {
             "one": "1",
-            "two": "2"
+            "two": "2",
+            "nested_var": 10
         }
     },
     "inheritence": {
@@ -38,11 +51,23 @@
         "sub_object": {
             "three": "3",
             "one": "1",
-            "two": "2"
+            "two": "2",
+            "nested_var": 10
         },
         "unquoted_string": "without_whitespace",
-        "binary": 19,
-        "binary_shift": "1<<16"
+        "unquoted": [
+            "strings",
+            "in",
+            "arrays"
+        ],
+        "binary_literal": 19,
+        "bit_shifts": 65792,
+        "variable_data_path": "path/to/data/subdir",
+        "variable_int": 10,
+        "array_of_vars": [
+            "path/to/data",
+            "hello"
+        ]
     },
     "objb": {
         "b": "b"
@@ -53,11 +78,23 @@
         "sub_object": {
             "three": "3",
             "one": "1",
-            "two": "2"
+            "two": "2",
+            "nested_var": 22
         },
         "unquoted_string": "without_whitespace",
-        "binary": 19,
-        "binary_shift": "1<<16",
+        "unquoted": [
+            "strings",
+            "in",
+            "arrays"
+        ],
+        "binary_literal": 19,
+        "bit_shifts": 65792,
+        "variable_data_path": "another/path/to/data/subdir",
+        "variable_int": 22,
+        "array_of_vars": [
+            "another/path/to/data",
+            "hello"
+        ],
         "b": "b"
     },
     "str_test": ":[{}]'+.,0b0x",

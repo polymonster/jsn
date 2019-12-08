@@ -3,14 +3,41 @@ import json
 import sys
 import os
 import traceback
-import re
 
 
-# build info for jobs
+# struct to store the build info for jobs from parsed commandline args
 class build_info:
-    inputs = []
-    output_dir = ""
-    print_out = False
+    inputs = []         # list of files
+    output_dir = ""     # output directory
+    print_out = False   # print out the resulting json from jsn to the console
+
+
+# parse command line args passed in
+def parse_args():
+    info = build_info()
+    if len(sys.argv) == 1:
+        display_help
+    for i in range(1, len(sys.argv)):
+        if sys.argv[i] == "-i":
+            j = i + 1
+            while j < len(sys.argv) and sys.argv[j][0] != '-':
+                info.inputs.append(sys.argv[j])
+                j = j + 1
+            i = j
+        if sys.argv[i] == "-o":
+            info.output_dir = sys.argv[i + 1]
+        if sys.argv[i] == "-p":
+            info.print_out = True
+    return info
+
+
+# help
+def display_help():
+    print("commandline arguments:")
+    print("    -help display this message")
+    print("    -i list of input files or directories to process")
+    print("    -o output file or directory ")
+    print("    -p print output to console ")
 
 
 # do c like (u32)-1
@@ -45,34 +72,6 @@ def is_file(file):
     if len(os.path.splitext(file)[1]) > 0:
         return True
     return False
-
-
-# parse command line args passed in
-def parse_args():
-    info = build_info()
-    if len(sys.argv) == 1:
-        display_help
-    for i in range(1, len(sys.argv)):
-        if sys.argv[i] == "-i":
-            j = i + 1
-            while j < len(sys.argv) and sys.argv[j][0] != '-':
-                info.inputs.append(sys.argv[j])
-                j = j + 1
-            i = j
-        if sys.argv[i] == "-o":
-            info.output_dir = sys.argv[i + 1]
-        if sys.argv[i] == "-p":
-            info.print_out = True
-    return info
-
-
-# help
-def display_help():
-    print("commandline arguments:")
-    print("    -help display this message")
-    print("    -i list of input files or directories to process")
-    print("    -o output file or directory ")
-    print("    -p print output to console ")
 
 
 # python json style dumps
@@ -115,7 +114,7 @@ def is_inside_quotes(str_list, pos):
     return 0
 
 
-# find strings
+# find all string tokens within jsn source marked by start and end index
 def find_strings(jsn):
     quote_types = ["\"", "'"]
     oq = ""
@@ -138,7 +137,7 @@ def find_strings(jsn):
     return str_list
 
 
-# remove whitespace and newlines to simply subsequent ops
+# remove whitespace and newlines to simplify subsequent ops
 def clean_src(jsn):
     clean = ""
     inside_quotes = False
@@ -153,7 +152,7 @@ def clean_src(jsn):
     return clean
 
 
-# remove comments, taken from polymonster/stub-format/stub_format.py ()
+# remove comments, taken from https:/github.com/polymonster/stub-format/stub_format.py
 def remove_comments(file_data):
     lines = file_data.split("\n")
     inside_block = False
@@ -230,10 +229,12 @@ def find_first(string, pos, chars):
     return first
 
 
-# def get value type, object array
+# get value type, object, array, int, float, bool, hex, binary, binary shift
 def get_value_type(value):
     value = value.strip()
     if len(value) > 0:
+        if value[0] == "\"":
+            return "string"
         if value[0] == "{":
             return "object"
         if value[0] == "[":
@@ -258,6 +259,8 @@ def get_value_type(value):
                 return "binary"
             except ValueError:
                 pass
+        if value.find("<<") != -1 or value.find(">>") != -1:
+            return "binary_shift"
         try:
             int(value)
             return "int"
@@ -279,7 +282,7 @@ def get_inherits(object_key):
     return object_key, []
 
 
-# add quotes to unquoted keys
+# add quotes to unquoted keys, strings and strings in arrays
 def quote_keys(jsn):
     delimiters = [",", "{"]
     pos = 0
@@ -343,6 +346,18 @@ def quote_keys(jsn):
             value = in_quotes(value)
             quoted += value
             pos = next
+        elif get_value_type(value) == "array":
+            end = jsn.find("]", pos) + 1
+            contents = jsn[pos+1:end-1].strip().split(",")
+            quoted_contents = "["
+            for item in contents:
+                if get_value_type(item) == "string":
+                    quoted_contents += in_quotes(item)
+                else:
+                    quoted_contents += item
+                quoted_contents += ","
+            quoted += quoted_contents + "]"
+            pos = end
         elif get_value_type(value) == "hex":
             hex_value = int(value[2:], 16)
             quoted += str(hex_value)
@@ -350,6 +365,18 @@ def quote_keys(jsn):
         elif get_value_type(value) == "binary":
             bin_value = int(value[2:], 2)
             quoted += str(bin_value)
+            pos = next
+        elif get_value_type(value) == "binary_shift":
+            components = value.split("|")
+            bv = 0
+            for comp in components:
+                if comp.find("<<") != -1:
+                    comp = comp.split("<<")
+                    bv |= int(comp[0]) << int(comp[1])
+                elif comp.find(">>") != -1:
+                    comp = comp.split(">>")
+                    bv |= int(comp[0]) << int(comp[1])
+            quoted += str(bv)
             pos = next
         elif get_value_type(value) == "float":
             f = value
@@ -368,7 +395,7 @@ def quote_keys(jsn):
     return quoted
 
 
-# remove trailing commas
+# remove trailing commas from objects and arrays
 def remove_trailing_commas(jsn):
     trail = ["}", "]"]
     clean = ""
@@ -382,7 +409,7 @@ def remove_trailing_commas(jsn):
     return clean
 
 
-# inherit dict
+# inherit dict member wise
 def inherit_dict(dest, second):
     for k, v in second.items():
         if type(v) == dict:
@@ -394,7 +421,7 @@ def inherit_dict(dest, second):
                 dest[k] = v
 
 
-# recursively merge dicts
+# recursively merge dicts member wise
 def inherit_dict_recursive(d, d2):
     inherits = []
     for k, v in d.items():
@@ -411,6 +438,7 @@ def inherit_dict_recursive(d, d2):
             inherit_dict_recursive(v, d)
 
 
+# finds files to import (includes)
 def get_imports(jsn):
     imports = []
     bp = jsn.find("{")
@@ -419,6 +447,54 @@ def get_imports(jsn):
         if i.find("import") != -1:
             imports.append(i[len("import"):].strip())
     return jsn[bp:], imports
+
+
+# resolves a single "${var}" into a typed value or a token pasted string
+def resolve_single_var(value, vars):
+    value_string = str(value)
+    sp = value_string.find("${")
+    if sp != -1:
+        ep = value_string.find("}", sp)
+        var_string = value_string[sp:ep + 1]
+        sp += 2
+        var_name = value_string[sp:ep]
+        if var_name in vars.keys():
+            if type(vars[var_name]) == str:
+                return value.replace(var_string, vars[var_name])
+            else:
+                return vars[var_name]
+        else:
+            print(value)
+            print("error: undefined variable '" + value_string[sp:ep] + "'")
+            exit(1)
+    return None
+
+
+# replace ${} with variables in vars
+def resolve_vars_recursive(d, vars):
+    stack_vars = vars.copy()
+    if "jsn_vars" in d.keys():
+        for vk in d["jsn_vars"].keys():
+            stack_vars[vk] = d["jsn_vars"][vk]
+    for k in d.keys():
+        value = d[k]
+        if type(value) == dict:
+            resolve_vars_recursive(d[k], stack_vars)
+        elif type(value) == list:
+            resolved_list = []
+            for i in value:
+                ri = resolve_single_var(i, stack_vars)
+                if ri:
+                    resolved_list.append(ri)
+                else:
+                    resolved_list.append(i)
+            d[k] = resolved_list
+        else:
+            var = resolve_single_var(d[k], stack_vars)
+            if var:
+                d[k] = var
+    if "jsn_vars" in d.keys():
+        d.pop("jsn_vars", None)
 
 
 # convert jsn to json
@@ -449,6 +525,10 @@ def loads(jsn):
 
     # inherit
     inherit_dict_recursive(j, j)
+
+    # resolve vars
+    resolve_vars_recursive(j, dict())
+
     return j
 
 
