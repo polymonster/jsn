@@ -1,7 +1,7 @@
 import import.jsn
 {   
-	// sytax highlights quite nicely in most editors with c or c++ syntax      
-	
+    // sytax highlights quite nicely in most editors with c or c++ syntax      
+    
     // allow comments
     
     /*
@@ -10,7 +10,7 @@ import import.jsn
     comments
     */
     
-    //		tabs and any whitespace allowed
+    //        tabs and any whitespace allowed
 
     // compatible with json
     "json":
@@ -30,9 +30,9 @@ import import.jsn
         hexadecimal: 0xdecaf,
         line_breaks: "Look, Mom! No \
 \\n's!",
-  		leading_decimal_point: .8675309, and_trailing: 8675309.,
-  		positive_sign: +1,
-  		trailing_comma: 'in objects', and_in: ['arrays',],
+          leading_decimal_point: .8675309, and_trailing: 8675309.,
+          positive_sign: +1,
+          trailing_comma: 'in objects', and_in: ['arrays',],
     },
     
     // jsn features
@@ -46,9 +46,9 @@ import import.jsn
         // you can define variables to be re-used
         jsn_vars: 
         {
-        	data: "path/to/data",
-        	var_str: "hello",
-        	var_int: 10
+            data: "path/to/data",
+            var_str: "hello",
+            var_int: 10
         },
         
         // evaluate variables with ${} inside quotes..
@@ -69,8 +69,8 @@ import import.jsn
     inheritence(jsn): // add object name to inherit inside brackets
     {        
         // inheritance adds keys from jsn object
-    	// ..
-    	
+        // ..
+        
         // duplicated keys are overridden by the derived object
         base: "bar",
         
@@ -87,14 +87,14 @@ import import.jsn
     
     multiple_inheritence(inheritence, objb):
     {
-    	// vars can also be shadowed / overriden..
-    	jsn_vars: 
+        // vars can also be shadowed / overriden..
+        jsn_vars: 
         {
-        	data: "another/path/to/data",
-        	var_int: 22
+            data: "another/path/to/data",
+            var_int: 22
         },
         
-    	c: "c"
+        c: "c"
     },
     
     //**
