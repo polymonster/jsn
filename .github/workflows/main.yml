@@ -21,7 +21,7 @@ jobs:
           cd pypi
           mkdir jsn
           cd ..
-          cp jsn.py pypi/jsn/_init_.py
+          cp jsn.py pypi/jsn/__init__.py
           cp readme.md pypi/readme.md
           cp license pypi/license
           cd pypi
