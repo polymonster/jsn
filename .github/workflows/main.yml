@@ -18,7 +18,8 @@ jobs:
           --user
       - name: Setup package
         run: >-
-          cp jsn.py _init_.py
+          mkdir pypi/jsn
+          cp jsn.py pypi/jsn/_init_.py
       - name: Build a binary wheel and a source tarball
         run: >-
           python -m
