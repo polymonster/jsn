@@ -3,11 +3,11 @@
 
 jsn is a user-friendly data format that can be reliably edited by humans by addressing some of the common mistakes that occur when using standard json. 
 
-It adds powerful features such as inheritence, variables, includes and syntax improvements to make jsn files more compact and re-usable then a json counterpart.
+It adds powerful features such as inheritence, variables, includes and syntax improvements to make jsn files more compact and re-usable than a json counterpart, it is an ideal solution for complex multi-platform build configuration and is currently being used in a number of personal and professional projects.
 
-jsn can be used directly in python as a dictionary, or it can be converted to json to be used with other languages and tools which already support json.
+jsn can be used directly in python as a dictionary, or it can be converted to json to be used with other languages and tools and libraries which have json support.
 
-If you are using hand edited json in any projects currently, jsn will easily integrate into your workflow and make editing simple.
+If you are using hand edited json in any projects currently, jsn will easily integrate into your existing workflow and improve efficiency and reliability.
 
 
 # Features
