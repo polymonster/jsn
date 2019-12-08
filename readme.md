@@ -1,21 +1,21 @@
 # jsn
 [![Build Status](https://travis-ci.org/polymonster/jsn.svg?branch=master)](https://travis-ci.org/polymonster/jsn) [![codecov](https://codecov.io/gh/polymonster/jsn/branch/master/graph/badge.svg)](https://codecov.io/gh/polymonster/jsn)
 
-jsn is a user-friendly data format that can be edited by humans by improving some of the common mistakes that occur when using standard json. It also adds powerful features such as inheritence, file includes and syntax improvements to make jsn files more compact and re-usable then a json counterpart.
+jsn is a user-friendly data format that can be reliably edited by humans by improving some of the common mistakes that occur when using standard json. It also adds powerful features such as inheritence, variables, includes and syntax improvements to make jsn files more compact and re-usable then a json counterpart.
 
 jsn can be used directly in python as a dictionary, or it can be converted to json to be used with other languages and tools which already support json.
 
 If you are using hand edited json in any projects currently, jsn will easily integrate into your workflow and make editing simple.
 
 
-# Feature Summary
-
+# Features
+- Includes / file import.
+- Inheritance (hierarchicle and multiple).
+- Environment style scoped variables.
 - Quoteless keys.
 - Quoteless strings.
 - Single quotes.
 - Single and multi-line comments.
-- Includes / file import.
-- Inheritance (hierarchicle and multiple).
 - Multi-line strings / line breaks.
 - Hex, binary, postive sign, improve float syntax.
 
