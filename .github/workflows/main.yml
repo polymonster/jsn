@@ -18,6 +18,8 @@ jobs:
           --user
       - name: Build a binary wheel and a source tarball
         run: >-
+          mkdir jsn
+          cp jsn.py jsn/_init_.py
           python -m
           pep517.build
           --source
