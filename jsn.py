@@ -1,4 +1,6 @@
 # lightweight json format without the need for quotes, allowing comments, file importing, inheritence and more
+# copyright Alex Dixon 2019: https://github.com/polymonster/jsn/blob/master/license
+
 import json
 import sys
 import os
