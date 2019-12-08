@@ -43,6 +43,14 @@ commandline arguments:
 
 # Python API
 
+Install via pip:
+
+```
+python3 -m pip install jsn
+```
+
+Or alternatively copy jsn.py where you need it.
+
 jsn can be used just like json as a python dictionary.
 
 ```python
