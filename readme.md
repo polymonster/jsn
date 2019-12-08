@@ -17,7 +17,7 @@ If you are using hand edited json in any projects currently, jsn will easily int
 - Single quotes.
 - Single and multi-line comments.
 - Multi-line strings / line breaks.
-- Hex, binary, postive sign, improve float syntax.
+- Hex, binary, bit shifts, int and float improvements.
 
 # Python API
 
@@ -54,7 +54,7 @@ commandline arguments:
 import import.jsn
 {   
     // sytax highlights quite nicely in most editors with c or c++ syntax      
-	
+    
     // allow comments
     
     /*
@@ -63,7 +63,7 @@ import import.jsn
     comments
     */
     
-    //		tabs and any whitespace allowed
+    //        tabs and any whitespace allowed
 
     // compatible with json
     "json":
@@ -83,34 +83,46 @@ import import.jsn
         hexadecimal: 0xdecaf,
         line_breaks: "Look, Mom! No \
 \\n's!",
-	leading_decimal_point: .8675309, and_trailing: 8675309.,
-	positive_sign: +1,
-	trailing_comma: 'in objects', and_in: ['arrays',],
+          leading_decimal_point: .8675309, and_trailing: 8675309.,
+          positive_sign: +1,
+          trailing_comma: 'in objects', and_in: ['arrays',],
     },
     
     // jsn features
     jsn:
     {
         unquoted_string: without_whitespace, // cannot contain whitespace or special chars (see str_test)
-        binary: 0b10011,
-        binary_shift: 1<<16,
+        unquoted: [strings, in, arrays],
+        binary_literal: 0b10011,
+        bit_shifts: 1<<16 | 1<<8,
+        
+        // you can define variables to be re-used
+        jsn_vars: 
+        {
+            data: "path/to/data",
+            var_str: "hello",
+            var_int: 10
+        },
+        
+        // evaluate variables with ${} inside quotes..
+        variable_data_path: "${data}/subdir",
+        variable_int: "${var_int}",
+        array_of_vars: ["${data}", "${var_str}"],
         
         // inheritance below..
         base: "foo",
         sub_object:
         {
             one: "1",
-            two: "2"
+            two: "2",
+            nested_var: "${var_int}", // variable comes from outer scope.
         }, // allow trailing commas
     },
     
     inheritence(jsn): // add object name to inherit inside brackets
     {        
         // inheritance adds keys from jsn object
-        
-        // unquoted_string: without_whitespace,
-        // binary: 0b10011,
-        // binary_shift: 1<<16,
+        // ..
         
         // duplicated keys are overridden by the derived object
         base: "bar",
@@ -119,8 +131,7 @@ import import.jsn
         sub_object:
         {
             three: "3"
-            // one: "1",
-            // two: "2"
+            //..
         }
     },
     
@@ -129,7 +140,14 @@ import import.jsn
     
     multiple_inheritence(inheritence, objb):
     {
-    	c: "c"
+        // vars can also be shadowed / overriden..
+        jsn_vars: 
+        {
+            data: "another/path/to/data",
+            var_int: 22
+        },
+        
+        c: "c"
     },
     
     //**
@@ -162,17 +180,30 @@ import import.jsn
         "positive_sign": 1,
         "trailing_comma": "in objects",
         "and_in": [
-            "arrays"
+            "arrays",
+            ""
         ]
     },
     "jsn": {
         "unquoted_string": "without_whitespace",
-        "binary": 19,
-        "binary_shift": "1<<16",
+        "unquoted": [
+            "strings",
+            "in",
+            "arrays"
+        ],
+        "binary_literal": 19,
+        "bit_shifts": 65792,
+        "variable_data_path": "path/to/data/subdir",
+        "variable_int": 10,
+        "array_of_vars": [
+            "path/to/data",
+            "hello"
+        ],
         "base": "foo",
         "sub_object": {
             "one": "1",
-            "two": "2"
+            "two": "2",
+            "nested_var": 10
         }
     },
     "inheritence": {
@@ -180,11 +211,23 @@ import import.jsn
         "sub_object": {
             "three": "3",
             "one": "1",
-            "two": "2"
+            "two": "2",
+            "nested_var": 10
         },
         "unquoted_string": "without_whitespace",
-        "binary": 19,
-        "binary_shift": "1<<16"
+        "unquoted": [
+            "strings",
+            "in",
+            "arrays"
+        ],
+        "binary_literal": 19,
+        "bit_shifts": 65792,
+        "variable_data_path": "path/to/data/subdir",
+        "variable_int": 10,
+        "array_of_vars": [
+            "path/to/data",
+            "hello"
+        ]
     },
     "objb": {
         "b": "b"
@@ -195,11 +238,23 @@ import import.jsn
         "sub_object": {
             "three": "3",
             "one": "1",
-            "two": "2"
+            "two": "2",
+            "nested_var": 22
         },
         "unquoted_string": "without_whitespace",
-        "binary": 19,
-        "binary_shift": "1<<16",
+        "unquoted": [
+            "strings",
+            "in",
+            "arrays"
+        ],
+        "binary_literal": 19,
+        "bit_shifts": 65792,
+        "variable_data_path": "another/path/to/data/subdir",
+        "variable_int": 22,
+        "array_of_vars": [
+            "another/path/to/data",
+            "hello"
+        ],
         "b": "b"
     },
     "str_test": ":[{}]'+.,0b0x",
