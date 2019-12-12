@@ -49,26 +49,15 @@
         "positive_sign": 1
     }, 
     "json": {
-        "string": "yes", 
         "int": 1, 
-        "float": 1.0, 
-        "bool": true, 
-        "nested_objects": {
-            "yes": true
-        }, 
         "array": [
             1, 
             2, 
             3
         ], 
-        "array_of_objects": [
-            {
-                "object": 1
-            }, 
-            {
-                "object": 2
-            }
-        ]
+        "float": 1.0, 
+        "bool": true, 
+        "string": "yes"
     }, 
     "inheritence": {
         "bit_shifts": 65792, 
@@ -94,6 +83,32 @@
         "variable_int": 10
     }, 
     "str_test": ":[{}]'+.,0b0x", 
+    "xjsn_test": {
+        "array_of_arrays": [
+            [
+                "hello", 
+                "world"
+            ], 
+            [
+                "goodbye", 
+                "world"
+            ]
+        ], 
+        "array_of_objects": [
+            {
+                "object": 1
+            }, 
+            {
+                "object": 2
+            }
+        ], 
+        "nested_objects": {
+            "and": {
+                "deeper": "nesting"
+            }, 
+            "yes": true
+        }
+    }, 
     "another_file": {
         "jsn": "can import content from other files"
     }
