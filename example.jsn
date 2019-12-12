@@ -19,7 +19,15 @@ import import.jsn
         "int": 1,
         "float": 1.0,
         "string": "yes",
-        "array": [1, 2, 3]
+        "array": [1, 2, 3],
+        "array_of_objects":[
+        	{"object": 1},
+        	{"object": 2}
+        ],
+        "nested_objects":
+        {
+        	"yes": true
+        }
     },
     
     // compatible with json5

@@ -284,8 +284,44 @@ def get_inherits(object_key):
     return object_key, []
 
 
+# finds the end of a pair of brackets, enclosing sub brackets inside them
+def enclose_brackets(open, close, string, pos):
+    start = pos
+    pos = string.find(open, pos)
+    stack = [open]
+    pos += 1
+    while len(stack) > 0 and pos < len(string):
+        if string[pos] == open:
+            stack.append(open)
+        if string[pos] == close:
+            stack.pop()
+        pos += 1
+    return pos
+
+
+# add quotes to array items
+def quote_array(jsn):
+    if get_value_type(jsn) == "array":
+        pass
+    elif get_value_type(jsn) == "object":
+        return "[" + quote_object(jsn) + "]"
+    else:
+        contents = jsn.strip().split(",")
+        quoted_contents = "["
+        for item in contents:
+            if len(item) == 0:
+                continue
+            if get_value_type(item) == "string":
+                quoted_contents += in_quotes(item)
+            else:
+                quoted_contents += item
+            quoted_contents += ","
+        return quoted_contents + "]"
+    return "[" + jsn + "]"
+
+
 # add quotes to unquoted keys, strings and strings in arrays
-def quote_keys(jsn):
+def quote_object(jsn):
     delimiters = [",", "{"]
     pos = 0
     quoted = ""
@@ -349,18 +385,8 @@ def quote_keys(jsn):
             quoted += value
             pos = next
         elif get_value_type(value) == "array":
-            end = jsn.find("]", pos) + 1
-            contents = jsn[pos+1:end-1].strip().split(",")
-            quoted_contents = "["
-            for item in contents:
-                if len(item) == 0:
-                    continue
-                if get_value_type(item) == "string":
-                    quoted_contents += in_quotes(item)
-                else:
-                    quoted_contents += item
-                quoted_contents += ","
-            quoted += quoted_contents + "]"
+            end = enclose_brackets("[", "]", jsn, pos)
+            quoted += quote_array(jsn[pos+1:end-1])
             pos = end
         elif get_value_type(value) == "hex":
             hex_value = int(value[2:], 16)
@@ -508,7 +534,7 @@ def loads(jsn):
     jsn = change_quotes(jsn)
     jsn = collapse_line_breaks(jsn)
     jsn = clean_src(jsn)
-    jsn = quote_keys(jsn)
+    jsn = quote_object(jsn)
     jsn = remove_trailing_commas(jsn)
     jsn = format(jsn)
 

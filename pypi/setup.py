@@ -5,7 +5,7 @@ with open("readme.md", "r") as fh:
 
 setuptools.setup(
     name="jsn",
-    version="1.0.3",
+    version="1.0.4",
     author="Alex Dixon",
     author_email="alexandercdixon@gmail.com",
     description="A relaxed, user-friendly json-like data format with comments, includes, inheritance and syntactic sugar.. extending json and json5.",
@@ -13,10 +13,12 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/polymonster/jsn",
     packages=setuptools.find_packages(),
+    python_requires='>=2.6',
     classifiers=[
+    	'Programming Language :: Python :: 2',
         "Programming Language :: Python :: 3",
+        "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ],
-    python_requires='>=3.6'
+        "Operating System :: OS Independent"
+    ]
 )
