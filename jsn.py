@@ -52,7 +52,7 @@ def us(v):
 # return string inside "quotes" to make code gen cleaner
 def in_quotes(string):
     if len(string) >= 2:
-        if string[0] == "\"" and string[len(string)-1] == "\"":
+        if string[0] == "\"":
             return string
     return '"' + string + '"'
 
@@ -307,7 +307,6 @@ def quote_array(jsn):
         quoted_contents = "["
         while True:
             end = enclose_brackets("[", "]", jsn, pos)
-            print(jsn[pos+1:end-1])
             quoted_contents += quote_array(jsn[pos+1:end-1]) + ","
             if end >= len(jsn)-1:
                 return quoted_contents + "]"
@@ -315,17 +314,20 @@ def quote_array(jsn):
     elif get_value_type(jsn) == "object":
         return "[" + quote_object(jsn) + "]"
     else:
-        contents = jsn.strip().split(",")
-        quoted_contents = "["
-        for item in contents:
-            if len(item) == 0:
-                continue
-            if get_value_type(item) == "string":
-                quoted_contents += in_quotes(item)
-            else:
-                quoted_contents += item
-            quoted_contents += ","
-        return quoted_contents + "]"
+        if jsn[0] == "\"":
+             pass
+        else:
+            contents = jsn.strip().split(",")
+            quoted_contents = "["
+            for item in contents:
+                if len(item) == 0:
+                    continue
+                if get_value_type(item) == "string":
+                    quoted_contents += in_quotes(item)
+                else:
+                    quoted_contents += item
+                quoted_contents += ","
+            return quoted_contents + "]"
     return "[" + jsn + "]"
 
 
@@ -484,7 +486,8 @@ def get_imports(jsn):
     head = jsn[:bp].split("\n")
     for i in head:
         if i.find("import") != -1:
-            imports.append(i[len("import"):].strip())
+            stripped = i[len("import"):].strip().strip("\"").strip()
+            imports.append(os.path.join(os.getcwd(), stripped))
     return jsn[bp:], imports
 
 
@@ -503,6 +506,7 @@ def resolve_single_var(value, vars):
             else:
                 return vars[var_name]
         else:
+            print(json.dumps(vars, indent=4))
             print(value)
             print("error: undefined variable '" + value_string[sp:ep] + "'")
             exit(1)
