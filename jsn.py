@@ -301,7 +301,9 @@ def enclose_brackets(open, close, string, pos):
 
 # add quotes to array items
 def quote_array(jsn):
-    if get_value_type(jsn) == "array":
+    if not jsn:
+        pass
+    elif get_value_type(jsn) == "array":
         # array of arrays
         pos = 0
         quoted_contents = "["
