@@ -123,11 +123,14 @@ import import.jsn
         	[goodbye, world]
         ],
 
-        array_of_numbers:[
-            255,
+        array_of_values:[
+            +255,
             0b11111111,
             0xff,
             1 << 1,
+            1 << 2 | 1,
+            1 << 2 | 1,
+            .255
         ],
     },
     

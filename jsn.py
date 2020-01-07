@@ -323,6 +323,8 @@ def quote_value(value, pos, next):
             elif comp.find(">>") != -1:
                 comp = comp.split(">>")
                 bv |= int(comp[0]) << int(comp[1])
+            else:
+                bv |= int(comp)
         quoted = str(bv)
         pos = next
     elif get_value_type(value) == "float":
