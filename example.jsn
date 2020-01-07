@@ -99,7 +99,11 @@ import import.jsn
     
     xxx:
     {
-    	// some test cases
+        // some test cases
+        empty_object: {},
+
+        empty_array: [],
+
     	array_of_objects:[
         	{object: 1},
         	{object: 2}
@@ -117,7 +121,17 @@ import import.jsn
         array_of_arrays:[
         	[hello, world],
         	[goodbye, world]
-        ]
+        ],
+
+        array_of_values:[
+            +255,
+            0b11111111,
+            0xff,
+            1 << 1,
+            1 << 2 | 1,
+            1 << 2 | 1,
+            .255
+        ],
     },
     
     //**

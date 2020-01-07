@@ -299,9 +299,56 @@ def enclose_brackets(open, close, string, pos):
     return pos
 
 
+# add quotes and convert values to be json compatible
+def quote_value(value, pos, next):
+    quoted = ""
+    if get_value_type(value) == "string":
+        quoted += in_quotes(value)
+        pos = next
+    elif get_value_type(value) == "hex":
+        hex_value = int(value[2:], 16)
+        quoted = str(hex_value)
+        pos = next
+    elif get_value_type(value) == "binary":
+        bin_value = int(value[2:], 2)
+        quoted = str(bin_value)
+        pos = next
+    elif get_value_type(value) == "binary_shift":
+        components = value.split("|")
+        bv = 0
+        for comp in components:
+            if comp.find("<<") != -1:
+                comp = comp.split("<<")
+                bv |= int(comp[0]) << int(comp[1])
+            elif comp.find(">>") != -1:
+                comp = comp.split(">>")
+                bv |= int(comp[0]) << int(comp[1])
+            else:
+                bv |= int(comp)
+        quoted = str(bv)
+        pos = next
+    elif get_value_type(value) == "float":
+        f = value
+        if f[0] == ".":
+            f = "0" + f
+        elif f[len(f)-1] == ".":
+            f = f + "0"
+        quoted = f
+        pos = next
+    elif get_value_type(value) == "int":
+        i = value
+        if i[0] == "+":
+            i = i[1:]
+        quoted = i
+        pos = next
+    return (quoted, pos)
+
+
 # add quotes to array items
 def quote_array(jsn):
-    if get_value_type(jsn) == "array":
+    if not jsn:
+        pass
+    elif get_value_type(jsn) == "array":
         # array of arrays
         pos = 0
         quoted_contents = "["
@@ -322,10 +369,7 @@ def quote_array(jsn):
             for item in contents:
                 if len(item) == 0:
                     continue
-                if get_value_type(item) == "string":
-                    quoted_contents += in_quotes(item)
-                else:
-                    quoted_contents += item
+                quoted_contents += quote_value(item, 0, 0)[0]
                 quoted_contents += ","
             return quoted_contents + "]"
     return "[" + jsn + "]"
@@ -391,48 +435,14 @@ def quote_object(jsn):
         quoted += qkey
         quoted += ":"
         quoted += inherit
-        if get_value_type(value) == "string":
-            value = in_quotes(value)
-            quoted += value
-            pos = next
-        elif get_value_type(value) == "array":
+        if get_value_type(value) == "array":
             end = enclose_brackets("[", "]", jsn, pos)
             quoted += quote_array(jsn[pos+1:end-1])
             pos = end
-        elif get_value_type(value) == "hex":
-            hex_value = int(value[2:], 16)
-            quoted += str(hex_value)
-            pos = next
-        elif get_value_type(value) == "binary":
-            bin_value = int(value[2:], 2)
-            quoted += str(bin_value)
-            pos = next
-        elif get_value_type(value) == "binary_shift":
-            components = value.split("|")
-            bv = 0
-            for comp in components:
-                if comp.find("<<") != -1:
-                    comp = comp.split("<<")
-                    bv |= int(comp[0]) << int(comp[1])
-                elif comp.find(">>") != -1:
-                    comp = comp.split(">>")
-                    bv |= int(comp[0]) << int(comp[1])
-            quoted += str(bv)
-            pos = next
-        elif get_value_type(value) == "float":
-            f = value
-            if f[0] == ".":
-                f = "0" + f
-            elif f[len(f)-1] == ".":
-                f = f + "0"
-            quoted += f
-            pos = next
-        elif get_value_type(value) == "int":
-            i = value
-            if i[0] == "+":
-                i = i[1:]
-            quoted += i
-            pos = next
+        else:
+            value = quote_value(value, pos, next)
+            quoted += value[0]
+            pos = value[1]
     return quoted
 
 
