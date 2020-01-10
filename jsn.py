@@ -191,12 +191,16 @@ def remove_comments(file_data):
 def change_quotes(jsn):
     str_list = find_strings(jsn)
     conditioned = ""
+    prev = ""
     for c in range(0, len(jsn)):
+        if c > 0:
+            prev = jsn[c-1]
         char = jsn[c]
         if char == "\"":
             if is_inside_quotes(str_list, c):
-                conditioned += "\\\""
-                continue
+                if prev != "\\":
+                    conditioned += "\\\""
+                    continue
         if char == "'":
             if not is_inside_quotes(str_list, c):
                 conditioned += "\""

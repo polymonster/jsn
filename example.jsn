@@ -132,6 +132,10 @@ import import.jsn
             1 << 2 | 1,
             .255
         ],
+        
+        q1: "small 'quotes' inside",
+        q2: 'double "quotes" inside',
+        q3: "double escaped \"quotes\" inside"
     },
     
     //**

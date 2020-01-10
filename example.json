@@ -1,114 +1,142 @@
 {
-    "objb": {
-        "b": "b"
-    }, 
-    "multiple_inheritence": {
-        "c": "c", 
-        "b": "b", 
-        "jsn_inherit": [
-            "jsn"
-        ], 
-        "base": "bar", 
-        "sub_object": {
-            "three": "3"
-        }
-    }, 
-    "jsn": {
-        "bit_shifts": 65792, 
-        "array_of_vars": [
-            "path/to/data", 
-            "hello"
-        ], 
-        "binary_literal": 19, 
-        "base": "foo", 
-        "sub_object": {
-            "nested_var": 10, 
-            "two": "2", 
-            "one": "1"
-        }, 
-        "unquoted_string": "without_whitespace", 
-        "unquoted": [
-            "strings", 
-            "in", 
-            "arrays"
-        ], 
-        "variable_data_path": "path/to/data", 
-        "variable_int": 10
-    }, 
+    "json": {
+        "bool": true,
+        "int": 1,
+        "float": 1.0,
+        "string": "yes",
+        "array": [
+            1,
+            2,
+            3
+        ]
+    },
     "json5": {
-        "and_trailing": 8675309.0, 
-        "trailing_comma": "in objects", 
-        "line_breaks": "Look, Mom! No \\n's!", 
-        "single_quotes": "I can use \"doublequotes\" here", 
+        "unquoted": "and you can quote me on that",
+        "single_quotes": "I can use \"doublequotes\" here",
+        "hexadecimal": 912559,
+        "line_breaks": "Look, Mom! No \\n's!",
+        "leading_decimal_point": 0.8675309,
+        "and_trailing": 8675309.0,
+        "positive_sign": 1,
+        "trailing_comma": "in objects",
         "and_in": [
             "arrays"
-        ], 
-        "unquoted": "and you can quote me on that", 
-        "hexadecimal": 912559, 
-        "leading_decimal_point": 0.8675309, 
-        "positive_sign": 1
-    }, 
-    "json": {
-        "int": 1, 
-        "array": [
-            1, 
-            2, 
-            3
-        ], 
-        "float": 1.0, 
-        "bool": true, 
-        "string": "yes"
-    }, 
-    "inheritence": {
-        "bit_shifts": 65792, 
-        "array_of_vars": [
-            "path/to/data", 
-            "hello"
-        ], 
-        "binary_literal": 19, 
-        "base": "bar", 
-        "sub_object": {
-            "one": "1", 
-            "three": "3", 
-            "two": "2", 
-            "nested_var": 10
-        }, 
-        "unquoted_string": "without_whitespace", 
+        ]
+    },
+    "jsn": {
+        "unquoted_string": "without_whitespace",
         "unquoted": [
-            "strings", 
-            "in", 
+            "strings",
+            "in",
             "arrays"
-        ], 
-        "variable_data_path": "path/to/data", 
-        "variable_int": 10
-    }, 
-    "str_test": ":[{}]'+.,0b0x", 
-    "xjsn_test": {
-        "array_of_arrays": [
-            [
-                "hello", 
-                "world"
-            ], 
-            [
-                "goodbye", 
-                "world"
-            ]
-        ], 
+        ],
+        "binary_literal": 19,
+        "bit_shifts": 65792,
+        "variable_data_path": "path/to/data/subdir",
+        "variable_int": 10,
+        "array_of_vars": [
+            "path/to/data",
+            "hello"
+        ],
+        "base": "foo",
+        "sub_object": {
+            "one": "1",
+            "two": "2",
+            "nested_var": 10
+        }
+    },
+    "inheritence": {
+        "base": "bar",
+        "sub_object": {
+            "three": "3",
+            "one": "1",
+            "two": "2",
+            "nested_var": 10
+        },
+        "unquoted_string": "without_whitespace",
+        "unquoted": [
+            "strings",
+            "in",
+            "arrays"
+        ],
+        "binary_literal": 19,
+        "bit_shifts": 65792,
+        "variable_data_path": "path/to/data/subdir",
+        "variable_int": 10,
+        "array_of_vars": [
+            "path/to/data",
+            "hello"
+        ]
+    },
+    "objb": {
+        "b": "b"
+    },
+    "multiple_inheritence": {
+        "c": "c",
+        "base": "bar",
+        "sub_object": {
+            "three": "3",
+            "one": "1",
+            "two": "2",
+            "nested_var": 22
+        },
+        "unquoted_string": "without_whitespace",
+        "unquoted": [
+            "strings",
+            "in",
+            "arrays"
+        ],
+        "binary_literal": 19,
+        "bit_shifts": 65792,
+        "variable_data_path": "another/path/to/data/subdir",
+        "variable_int": 22,
+        "array_of_vars": [
+            "another/path/to/data",
+            "hello"
+        ],
+        "b": "b"
+    },
+    "xxx": {
+        "empty_object": {},
+        "empty_array": [],
         "array_of_objects": [
             {
                 "object": 1
-            }, 
+            },
             {
                 "object": 2
             }
-        ], 
+        ],
         "nested_objects": {
+            "yes": true,
             "and": {
                 "deeper": "nesting"
-            }, 
-            "yes": true
-        }
-    }, 
+            }
+        },
+        "array_of_arrays": [
+            [
+                "hello",
+                "world"
+            ],
+            [
+                "goodbye",
+                "world"
+            ]
+        ],
+        "array_of_values": [
+            255,
+            255,
+            255,
+            2,
+            5,
+            5,
+            0.255
+        ],
+        "q1": "small 'quotes' inside",
+        "q2": "double \"quotes\" inside",
+        "q3": "double escaped \"quotes\" inside"
+    },
+    "str_test": ":[{}]'+.,0b0x",
     "another_file": {
         "jsn": "can import content from other files"
     }
