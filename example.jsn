@@ -69,18 +69,18 @@ import import.jsn
         // the platform specific keys will be merged into the base key if one exists
         platform:
         {
-        	base: "exists"
+            base: "exists"
         },
         
         // useful for selecting platform specific paths and executables
         platform<windows>:
         {
-        	exe: "path/windows/program.exe"
+            exe: "path/windows/program.exe"
         },
         
         platform<mac>:
         {
-        	exe: "path/mac/program"
+            exe: "path/mac/program"
         }
     },
     
@@ -122,23 +122,23 @@ import import.jsn
 
         empty_array: [],
 
-    	array_of_objects:[
-        	{object: 1},
-        	{object: 2}
+        array_of_objects:[
+            {object: 1},
+            {object: 2}
         ],
         
         nested_objects:
         {
-        	yes: true,
-        	and:
-        	{
-        		deeper: nesting
-        	}
+            yes: true,
+            and:
+            {
+                deeper: nesting
+            }
         },
         
         array_of_arrays:[
-        	[hello, world],
-        	[goodbye, world]
+            [hello, world],
+            [goodbye, world]
         ],
 
         array_of_values:[
