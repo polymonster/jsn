@@ -5,6 +5,7 @@ import json
 import sys
 import os
 import traceback
+import platform
 
 
 # struct to store the build info for jobs from parsed commandline args
@@ -554,6 +555,42 @@ def resolve_vars_recursive(d, vars):
         d.pop("jsn_vars", None)
 
 
+# resolve platform specific keys, merging
+def resolve_platform_keys_recursive(d, platform_name):
+    rm_keys = []
+    platform_dict = dict()
+    for k in d.keys():
+        bp = k.find("<")
+        ep = k.find(">")
+        if bp != -1 and ep != -1:
+            key_platform = k[bp+1:ep]
+            key_base = k[:bp]
+            if key_platform == platform_name:
+                platform_dict[key_base] = d[k]
+            rm_keys.append(k)
+        value = d[k]
+        if type(value) == dict:
+            resolve_platform_keys_recursive(d[k], platform_name)
+    for k in rm_keys:
+        d.pop(k)
+    inherit_dict(d, platform_dict)
+
+
+# check platform name and then recurse through dictionary selecting our current platform keys
+def resolve_platform_keys(d):
+    name_lookup = {
+        "Linux": "linux",
+        "Darwin": "mac",
+        "Windows": "windows"
+    }
+    platform_name = "unknown"
+    if platform.system() in name_lookup:
+        platform_name = name_lookup[platform.system()]
+    else:
+        print("warning: unknown platform system " + platform.system())
+    resolve_platform_keys_recursive(d, platform_name)
+
+
 # convert jsn to json
 def loads(jsn):
     jsn, imports = get_imports(jsn)
@@ -579,6 +616,9 @@ def loads(jsn):
     for i in imports:
         include_dict = loads(open(i, "r").read())
         inherit_dict(j, include_dict)
+
+    # resolve platform specific keys
+    resolve_platform_keys(j)
 
     # inherit
     inherit_dict_recursive(j, j)

@@ -127,9 +127,27 @@ import import.jsn
             two: "2",
             nested_var: "${var_int}", // variable comes from outer scope.
         }, // allow trailing commas
+        
+        // use <windows, mac, linux> in angled brackets to conditionally include or exclude keys
+        // the platform specific keys will be merged into the base key if one exists
+        platform:
+        {
+        	base: "exists"
+        },
+        
+        // useful for selecting platform specific paths and executables
+        platform<windows>:
+        {
+        	exe: "path/windows/program.exe"
+        },
+        
+        platform<mac>:
+        {
+        	exe: "path/mac/program"
+        }
     },
     
-    inheritence(jsn): // add object name to inherit inside brackets
+    inheritence(jsn): // add object name to inherit inside parenthesis
     {        
         // inheritance adds keys from jsn object
         // ..
@@ -158,6 +176,47 @@ import import.jsn
         },
         
         c: "c"
+    },
+    
+    xxx:
+    {
+        // some test cases
+        empty_object: {},
+
+        empty_array: [],
+
+    	array_of_objects:[
+        	{object: 1},
+        	{object: 2}
+        ],
+        
+        nested_objects:
+        {
+        	yes: true,
+        	and:
+        	{
+        		deeper: nesting
+        	}
+        },
+        
+        array_of_arrays:[
+        	[hello, world],
+        	[goodbye, world]
+        ],
+
+        array_of_values:[
+            +255,
+            0b11111111,
+            0xff,
+            1 << 1,
+            1 << 2 | 1,
+            1 << 2 | 1,
+            .255
+        ],
+        
+        q1: "small 'quotes' inside",
+        q2: 'double "quotes" inside',
+        q3: "double escaped \"quotes\" inside"
     },
     
     //**
@@ -213,6 +272,10 @@ import import.jsn
             "one": "1",
             "two": "2",
             "nested_var": 10
+        },
+        "platform": {
+            "base": "exists",
+            "exe": "path/mac/program"
         }
     },
     "inheritence": {
@@ -236,7 +299,11 @@ import import.jsn
         "array_of_vars": [
             "path/to/data",
             "hello"
-        ]
+        ],
+        "platform": {
+            "base": "exists",
+            "exe": "path/mac/program"
+        }
     },
     "objb": {
         "b": "b"
@@ -264,7 +331,51 @@ import import.jsn
             "another/path/to/data",
             "hello"
         ],
+        "platform": {
+            "base": "exists",
+            "exe": "path/mac/program"
+        },
         "b": "b"
+    },
+    "xxx": {
+        "empty_object": {},
+        "empty_array": [],
+        "array_of_objects": [
+            {
+                "object": 1
+            },
+            {
+                "object": 2
+            }
+        ],
+        "nested_objects": {
+            "yes": true,
+            "and": {
+                "deeper": "nesting"
+            }
+        },
+        "array_of_arrays": [
+            [
+                "hello",
+                "world"
+            ],
+            [
+                "goodbye",
+                "world"
+            ]
+        ],
+        "array_of_values": [
+            255,
+            255,
+            255,
+            2,
+            5,
+            5,
+            0.255
+        ],
+        "q1": "small 'quotes' inside",
+        "q2": "double \"quotes\" inside",
+        "q3": "double escaped \"quotes\" inside"
     },
     "str_test": ":[{}]'+.,0b0x",
     "another_file": {

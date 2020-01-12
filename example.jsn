@@ -64,9 +64,27 @@ import import.jsn
             two: "2",
             nested_var: "${var_int}", // variable comes from outer scope.
         }, // allow trailing commas
+        
+        // use <windows, mac, linux> in angled brackets to conditionally include or exclude keys
+        // the platform specific keys will be merged into the base key if one exists
+        platform:
+        {
+        	base: "exists"
+        },
+        
+        // useful for selecting platform specific paths and executables
+        platform<windows>:
+        {
+        	exe: "path/windows/program.exe"
+        },
+        
+        platform<mac>:
+        {
+        	exe: "path/mac/program"
+        }
     },
     
-    inheritence(jsn): // add object name to inherit inside brackets
+    inheritence(jsn): // add object name to inherit inside parenthesis
     {        
         // inheritance adds keys from jsn object
         // ..

@@ -43,6 +43,10 @@
             "one": "1",
             "two": "2",
             "nested_var": 10
+        },
+        "platform": {
+            "base": "exists",
+            "exe": "path/mac/program"
         }
     },
     "inheritence": {
@@ -66,7 +70,11 @@
         "array_of_vars": [
             "path/to/data",
             "hello"
-        ]
+        ],
+        "platform": {
+            "base": "exists",
+            "exe": "path/mac/program"
+        }
     },
     "objb": {
         "b": "b"
@@ -94,6 +102,10 @@
             "another/path/to/data",
             "hello"
         ],
+        "platform": {
+            "base": "exists",
+            "exe": "path/mac/program"
+        },
         "b": "b"
     },
     "xxx": {
