@@ -148,6 +148,10 @@
             [
                 "path/to/data",
                 "hello"
+            ],
+            [
+                "hello",
+                "non var"
             ]
         ],
         "q1": "small 'quotes' inside",

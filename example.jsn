@@ -157,7 +157,8 @@ import import.jsn
             vb: "hello",
         },
         array_of_array_vars: [
-        	["${va}", "${vb}"]
+        	["${va}", "${vb}"],
+        	["${vb}", "non var"]
         ],
         
         q1: "small 'quotes' inside",

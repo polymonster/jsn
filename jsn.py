@@ -519,7 +519,11 @@ def resolve_single_var(value, vars):
             if type(value) == list:
                 nl = list()
                 for i in value:
-                    nl.append(resolve_single_var(i, vars))
+                    ri = resolve_single_var(i, vars)
+                    if ri:
+                        nl.append(resolve_single_var(i, vars))
+                    else:
+                        nl.append(i)
                 return nl
             else:
                 if type(vars[var_name]) == str:
