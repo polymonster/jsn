@@ -516,10 +516,16 @@ def resolve_single_var(value, vars):
         sp += 2
         var_name = value_string[sp:ep]
         if var_name in vars.keys():
-            if type(vars[var_name]) == str:
-                return value.replace(var_string, vars[var_name])
+            if type(value) == list:
+                nl = list()
+                for i in value:
+                    nl.append(resolve_single_var(i, vars))
+                return nl
             else:
-                return vars[var_name]
+                if type(vars[var_name]) == str:
+                    return value.replace(var_string, vars[var_name])
+                else:
+                    return vars[var_name]
         else:
             print(json.dumps(vars, indent=4))
             print(value)

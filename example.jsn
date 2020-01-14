@@ -151,6 +151,15 @@ import import.jsn
             .255
         ],
         
+        jsn_vars: 
+        {
+            va: "path/to/data",
+            vb: "hello",
+        },
+        array_of_array_vars: [
+        	["${va}", "${vb}"]
+        ],
+        
         q1: "small 'quotes' inside",
         q2: 'double "quotes" inside',
         q3: "double escaped \"quotes\" inside"

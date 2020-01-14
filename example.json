@@ -144,6 +144,12 @@
             5,
             0.255
         ],
+        "array_of_array_vars": [
+            [
+                "path/to/data",
+                "hello"
+            ]
+        ],
         "q1": "small 'quotes' inside",
         "q2": "double \"quotes\" inside",
         "q3": "double escaped \"quotes\" inside"
