@@ -61,8 +61,10 @@ def in_quotes(string):
 # create a new dir for a file or a folder if it doesnt already exist and not throw an exception
 def create_dir(dst_file):
     dir = dst_file
-    if dir.find(".") != -1:
+    if is_file(dir):
         dir = os.path.dirname(dir)
+    if len(dir) == 0:
+        return
     if not os.path.exists(dir):
         os.makedirs(dir)
 
