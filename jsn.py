@@ -58,9 +58,11 @@ def in_quotes(string):
     return '"' + string + '"'
 
 
-# create a new dir if it doesnt already exist and not throw an exception
+# create a new dir for a file or a folder if it doesnt already exist and not throw an exception
 def create_dir(dst_file):
-    dir = os.path.dirname(dst_file)
+    dir = dst_file
+    if dir.find(".") != -1:
+        dir = os.path.dirname(dir)
     if not os.path.exists(dir):
         os.makedirs(dir)
 
@@ -531,6 +533,7 @@ def resolve_single_var(value, vars):
                 else:
                     return vars[var_name]
         else:
+            print(platform.system())
             print(json.dumps(vars, indent=4))
             print(value)
             print("error: undefined variable '" + value_string[sp:ep] + "'")
@@ -669,12 +672,12 @@ if __name__ == "__main__":
                     if not is_file(output_file):
                         output_file = os.path.join(info.output_dir, file)
                         output_file = change_ext(output_file, ".json")
-                        create_dir(output_file)
+                    create_dir(output_file)
                     convert_jsn(info, os.path.join(root, file), output_file)
         else:
             output_file = info.output_dir
             if not is_file(output_file):
                 output_file = os.path.join(info.output_dir, i)
                 output_file = change_ext(output_file, ".json")
-                create_dir(output_file)
+            create_dir(output_file)
             convert_jsn(info, i, output_file)
