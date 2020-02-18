@@ -136,6 +136,11 @@ import import.jsn
             }
         },
         
+		multi_type_arrays:[
+        	1,
+        	[2, 3]
+        ],
+        
         array_of_arrays:[
             [hello, world],
             [goodbye, world]

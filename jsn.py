@@ -356,32 +356,30 @@ def quote_value(value, pos, next):
 # add quotes to array items
 def quote_array(jsn):
     if not jsn:
-        pass
-    elif get_value_type(jsn) == "array":
-        # array of arrays
-        pos = 0
-        quoted_contents = "["
-        while True:
-            end = enclose_brackets("[", "]", jsn, pos)
-            quoted_contents += quote_array(jsn[pos+1:end-1]) + ","
-            if end >= len(jsn)-1:
-                return quoted_contents + "]"
-            pos = end + 1
-    elif get_value_type(jsn) == "object":
-        return "[" + quote_object(jsn) + "]"
-    else:
-        if jsn[0] == "\"":
-             pass
+        return "[" + jsn + "]"
+    # arrays can contain mixed data so go element wise
+    pos = 0
+    element_wise = ""
+    while True:
+        elem_end = jsn.find(",", pos)
+        if elem_end == -1:
+            elem_end = len(jsn)
+        elem = jsn[pos:elem_end]
+        if len(elem) == 0:
+            break
+        if get_value_type(elem) == "object":
+            element_wise += quote_object(elem)
+        elif get_value_type(elem) == "array":
+            elem_end = enclose_brackets("[", "]", jsn, pos)
+            sub_array = jsn[pos+1:elem_end-1]
+            element_wise += quote_array(sub_array)
         else:
-            contents = jsn.strip().split(",")
-            quoted_contents = "["
-            for item in contents:
-                if len(item) == 0:
-                    continue
-                quoted_contents += quote_value(item, 0, 0)[0]
-                quoted_contents += ","
-            return quoted_contents + "]"
-    return "[" + jsn + "]"
+            element_wise += quote_value(elem, 0, 0)[0]
+        if elem_end == len(jsn):
+            break
+        pos = elem_end+1
+        element_wise += ","
+    return "[" + element_wise + "]"
 
 
 # add quotes to unquoted keys, strings and strings in arrays

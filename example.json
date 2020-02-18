@@ -125,6 +125,13 @@
                 "deeper": "nesting"
             }
         },
+        "multi_type_arrays": [
+            1,
+            [
+                2,
+                3
+            ]
+        ],
         "array_of_arrays": [
             [
                 "hello",
