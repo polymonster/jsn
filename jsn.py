@@ -9,7 +9,7 @@ import platform
 
 
 # struct to store the build info for jobs from parsed commandline args
-class build_info:
+class BuildInfo:
     inputs = []         # list of files
     output_dir = ""     # output directory
     print_out = False   # print out the resulting json from jsn to the console
@@ -17,9 +17,9 @@ class build_info:
 
 # parse command line args passed in
 def parse_args():
-    info = build_info()
+    info = BuildInfo()
     if len(sys.argv) == 1:
-        display_help
+        display_help()
     for i in range(1, len(sys.argv)):
         if sys.argv[i] == "-i":
             j = i + 1
@@ -497,14 +497,24 @@ def inherit_dict_recursive(d, d2):
 
 
 # finds files to import (includes)
-def get_imports(jsn):
+def get_imports(jsn, filedir):
     imports = []
     bp = jsn.find("{")
     head = jsn[:bp].split("\n")
+    has_imports = False
+    for i in head:
+        if i.find("import") != -1:
+            has_imports = True
+    if not has_imports:
+        return jsn[bp:], imports
+    if not filedir:
+        filedir = os.getcwd()
+        print("WARNING: jsn loads() import file paths will be relative to cwd " + filedir)
+        print("\t use load_from_file() for import paths relative to the jsn file.")
     for i in head:
         if i.find("import") != -1:
             stripped = i[len("import"):].strip().strip("\"").strip()
-            imports.append(os.path.join(os.getcwd(), stripped))
+            imports.append(os.path.join(filedir, stripped))
     return jsn[bp:], imports
 
 
@@ -604,9 +614,16 @@ def resolve_platform_keys(d):
     resolve_platform_keys_recursive(d, platform_name)
 
 
+# load from file
+def load_from_file(filepath):
+    jsn_contents = open(filepath).read()
+    filepath = os.path.join(os.getcwd(), filepath)
+    return loads(jsn_contents, os.path.dirname(filepath))
+
+
 # convert jsn to json
-def loads(jsn):
-    jsn, imports = get_imports(jsn)
+def loads(jsn, filedir=None):
+    jsn, imports = get_imports(jsn, filedir)
     jsn = remove_comments(jsn)
     jsn = change_quotes(jsn)
     jsn = collapse_line_breaks(jsn)
@@ -645,14 +662,12 @@ def loads(jsn):
 # convert jsn to json and write to a file
 def convert_jsn(info, input_file, output_file):
     print("converting: " + input_file + " to " + output_file)
-    file = open(input_file, "r")
     output_file = open(output_file, "w+")
-    jdict = loads(file.read())
+    jdict = load_from_file(input_file)
     if info.print_out:
         print(json.dumps(jdict, indent=4))
     output_file.write(json.dumps(jdict, indent=4))
     output_file.close()
-    file.close()
 
 
 # output .jsn files as json,
@@ -661,7 +676,7 @@ if __name__ == "__main__":
     print("jsn ----------------------------------------------------------------------------")
     print("--------------------------------------------------------------------------------")
     info = parse_args()
-    if len(info.inputs) == 0 or info.output_dir == None:
+    if len(info.inputs) == 0 or not info.output_dir:
         display_help()
         exit(1)
     for i in info.inputs:
