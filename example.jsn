@@ -123,8 +123,8 @@ import import.jsn
         empty_array: [],
 
         array_of_objects:[
-            {object: 1},
-            {object: 2}
+            {object: 1, other: "value"},
+            {object: 2, other: "value"}
         ],
         
         nested_objects:

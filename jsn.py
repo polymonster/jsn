@@ -368,7 +368,9 @@ def quote_array(jsn):
         if len(elem) == 0:
             break
         if get_value_type(elem) == "object":
-            element_wise += quote_object(elem)
+            elem_end = enclose_brackets("{", "}", jsn, pos)
+            sub_object = jsn[pos:elem_end]
+            element_wise += quote_object(sub_object)
         elif get_value_type(elem) == "array":
             elem_end = enclose_brackets("[", "]", jsn, pos)
             sub_array = jsn[pos+1:elem_end-1]
