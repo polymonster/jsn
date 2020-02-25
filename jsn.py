@@ -364,7 +364,7 @@ def quote_array(jsn):
         elem_end = jsn.find(",", pos)
         if elem_end == -1:
             elem_end = len(jsn)
-        elem = jsn[pos:elem_end]
+        elem = jsn[pos:elem_end].strip()
         if len(elem) == 0:
             break
         if get_value_type(elem) == "object":
@@ -375,11 +375,16 @@ def quote_array(jsn):
             elem_end = enclose_brackets("[", "]", jsn, pos)
             sub_array = jsn[pos+1:elem_end-1]
             element_wise += quote_array(sub_array)
+        elif elem[0] == '\"':
+            elem_end += enclose_brackets("\"", "\"", jsn, pos)
+            element_wise = jsn[pos:elem_end]
         else:
             element_wise += quote_value(elem, 0, 0)[0]
         if elem_end == len(jsn):
             break
         pos = elem_end+1
+        if pos >= len(jsn):
+            break
         element_wise += ","
     return "[" + element_wise + "]"
 
