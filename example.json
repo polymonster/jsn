@@ -121,6 +121,10 @@
                 "other": "value"
             }
         ],
+        "array_with_string_commas": [
+            "test,2",
+            "test,3"
+        ],
         "nested_objects": {
             "yes": true,
             "and": {
