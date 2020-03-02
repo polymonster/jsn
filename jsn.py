@@ -679,9 +679,6 @@ def convert_jsn(info, input_file, output_file):
 
 # output .jsn files as json,
 if __name__ == "__main__":
-    print("--------------------------------------------------------------------------------")
-    print("jsn ----------------------------------------------------------------------------")
-    print("--------------------------------------------------------------------------------")
     info = parse_args()
     if len(info.inputs) == 0 or not info.output_dir:
         display_help()
