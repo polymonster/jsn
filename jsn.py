@@ -11,6 +11,7 @@ import platform
 # struct to store the build info for jobs from parsed commandline args
 class BuildInfo:
     inputs = []         # list of files
+    import_dirs = []    # lst of import directories to search
     output_dir = ""     # output directory
     print_out = False   # print out the resulting json from jsn to the console
 
@@ -27,9 +28,15 @@ def parse_args():
                 info.inputs.append(sys.argv[j])
                 j = j + 1
             i = j
-        if sys.argv[i] == "-o":
+        elif sys.argv[i] == "-I":
+            j = i + 1
+            while j < len(sys.argv) and sys.argv[j][0] != '-':
+                info.import_dirs.append(sys.argv[j])
+                j = j + 1
+            i = j
+        elif sys.argv[i] == "-o":
             info.output_dir = sys.argv[i + 1]
-        if sys.argv[i] == "-p":
+        elif sys.argv[i] == "-p":
             info.print_out = True
     return info
 
@@ -40,6 +47,7 @@ def display_help():
     print("    -help display this message")
     print("    -i list of input files or directories to process")
     print("    -o output file or directory ")
+    print("    -I list of import directories, to search for imports")
     print("    -p print output to console ")
 
 
@@ -504,7 +512,7 @@ def inherit_dict_recursive(d, d2):
 
 
 # finds files to import (includes)
-def get_imports(jsn, filedir):
+def get_imports(jsn, import_dirs):
     imports = []
     bp = jsn.find("{")
     head = jsn[:bp].split("\n")
@@ -514,14 +522,22 @@ def get_imports(jsn, filedir):
             has_imports = True
     if not has_imports:
         return jsn[bp:], imports
-    if not filedir:
+    if not import_dirs:
         filedir = os.getcwd()
         print("WARNING: jsn loads() import file paths will be relative to cwd " + filedir)
         print("\t use load_from_file() for import paths relative to the jsn file.")
     for i in head:
         if i.find("import") != -1:
             stripped = i[len("import"):].strip().strip("\"").strip()
-            imports.append(os.path.join(filedir, stripped))
+            found = False
+            for dir in import_dirs:
+                import_path_dir = os.path.join(dir, stripped)
+                if os.path.exists(import_path_dir):
+                    imports.append(import_path_dir)
+                    found = True
+                    break
+            if not found:
+                print("ERROR: cannot find import file " + stripped)
     return jsn[bp:], imports
 
 
@@ -622,15 +638,16 @@ def resolve_platform_keys(d):
 
 
 # load from file
-def load_from_file(filepath):
+def load_from_file(filepath, import_dirs):
     jsn_contents = open(filepath).read()
     filepath = os.path.join(os.getcwd(), filepath)
-    return loads(jsn_contents, os.path.dirname(filepath))
+    import_dirs.append(os.path.dirname(filepath))
+    return loads(jsn_contents, import_dirs)
 
 
 # convert jsn to json
-def loads(jsn, filedir=None):
-    jsn, imports = get_imports(jsn, filedir)
+def loads(jsn, import_dirs=None):
+    jsn, imports = get_imports(jsn, import_dirs)
     jsn = remove_comments(jsn)
     jsn = change_quotes(jsn)
     jsn = collapse_line_breaks(jsn)
@@ -651,7 +668,7 @@ def loads(jsn, filedir=None):
 
     # import
     for i in imports:
-        include_dict = loads(open(i, "r").read())
+        include_dict = loads(open(i, "r").read(), import_dirs)
         inherit_dict(j, include_dict)
 
     # resolve platform specific keys
@@ -670,18 +687,14 @@ def loads(jsn, filedir=None):
 def convert_jsn(info, input_file, output_file):
     print("converting: " + input_file + " to " + output_file)
     output_file = open(output_file, "w+")
-    jdict = load_from_file(input_file)
+    jdict = load_from_file(input_file, info.import_dirs)
     if info.print_out:
         print(json.dumps(jdict, indent=4))
     output_file.write(json.dumps(jdict, indent=4))
     output_file.close()
 
 
-# output .jsn files as json,
-if __name__ == "__main__":
-    print("--------------------------------------------------------------------------------")
-    print("jsn ----------------------------------------------------------------------------")
-    print("--------------------------------------------------------------------------------")
+def main():
     info = parse_args()
     if len(info.inputs) == 0 or not info.output_dir:
         display_help()
@@ -703,3 +716,9 @@ if __name__ == "__main__":
                 output_file = change_ext(output_file, ".json")
             create_dir(output_file)
             convert_jsn(info, i, output_file)
+
+
+# output .jsn files as json,
+if __name__ == "__main__":
+    main()
+

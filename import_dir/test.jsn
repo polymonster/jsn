@@ -1,0 +1,4 @@
+import import.jsn
+{   
+    test_jsn: "included from sub directory"
+}
