@@ -5,7 +5,7 @@ with open("readme.md", "r") as fh:
 
 setuptools.setup(
     name="jsn",
-    version="1.1.5",
+    version="1.1.7",
     author="Alex Dixon",
     author_email="alexandercdixon@gmail.com",
     description="A relaxed, user-friendly json-like data format with comments, includes, inheritance and syntactic sugar.. extending json and json5.",

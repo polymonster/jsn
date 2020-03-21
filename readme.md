@@ -26,7 +26,7 @@ If you are using hand edited json in any projects currently, jsn will easily int
 You can convert jsn to json using the commandline, clone this repository and add jsn to your path.
 
 ```
-jsn -i example.jsn -o example.json
+jsn -i example.jsn -o example.json -I import_dir
 ```
 
 ```
@@ -38,6 +38,7 @@ commandline arguments:
     -help display this message
     -i list of input files or directories to process
     -o output file or directory 
+    -I list of import directories, to search for imports
     -p print output to console 
 ```
 
