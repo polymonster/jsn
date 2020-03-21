@@ -683,6 +683,21 @@ def loads(jsn, import_dirs=None):
     return j
 
 
+# return a list of all imports for this file
+def get_import_file_list(filepath, import_dirs=None):
+    jsn = open(filepath, "r").read()
+    jsn, imports = get_imports(jsn, import_dirs)
+    for i in imports:
+        recursive_imports = get_import_file_list(i, import_dirs)
+        for ri in recursive_imports:
+            if ri not in imports:
+                imports.append(ri)
+    abs_imports = []
+    for i in imports:
+        abs_imports.append(os.path.normpath(os.path.join(os.getcwd(), i)))
+    return abs_imports
+
+
 # convert jsn to json and write to a file
 def convert_jsn(info, input_file, output_file):
     print("converting: " + input_file + " to " + output_file)
