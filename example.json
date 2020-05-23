@@ -167,6 +167,7 @@
                 "non var"
             ]
         ],
+        "multiple_vars": "path/to/data/hello.bin",
         "q1": "small 'quotes' inside",
         "q2": "double \"quotes\" inside",
         "q3": "double escaped \"quotes\" inside"

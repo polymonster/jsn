@@ -541,36 +541,52 @@ def get_imports(jsn, import_dirs):
     return jsn[bp:], imports
 
 
-# resolves a single "${var}" into a typed value or a token pasted string
-def resolve_single_var(value, vars):
+# finds all '${vars}' within a string returning in list [${va}, ${vb}, ...]
+def vars_in_string(string):
+    pos = 0
+    variables = []
+    while True:
+        sp = string.find("${", pos)
+        if sp != -1:
+            ep = string.find("}", sp)
+            variables.append(string[sp:ep + 1])
+            pos = sp + 2
+        else:
+            break
+    return variables
+            
+    
+# resolves "${var}" into a typed value or a token pasted string, handle multiple vars within strings or arrays
+def resolve_vars(value, vars):
     value_string = str(value)
-    sp = value_string.find("${")
-    if sp != -1:
-        ep = value_string.find("}", sp)
-        var_string = value_string[sp:ep + 1]
-        sp += 2
-        var_name = value_string[sp:ep]
+    vv = vars_in_string(value_string)
+    count = 0
+    for v in vv:
+        var_name = v[2:len(v)-1]
         if var_name in vars.keys():
             if type(value) == list:
                 nl = list()
                 for i in value:
-                    ri = resolve_single_var(i, vars)
+                    ri = resolve_vars(i, vars)
                     if ri:
-                        nl.append(resolve_single_var(i, vars))
+                        nl.append(resolve_vars(i, vars))
                     else:
                         nl.append(i)
                 return nl
             else:
                 if type(vars[var_name]) == str:
-                    return value.replace(var_string, vars[var_name])
+                    value = value.replace(v, vars[var_name])
+                    if len(vv) == count+1:
+                        return value
                 else:
                     return vars[var_name]
         else:
             print(platform.system())
             print(json.dumps(vars, indent=4))
             print(value)
-            print("error: undefined variable '" + value_string[sp:ep] + "'")
+            print("error: undefined variable '" + var_name + "'")
             exit(1)
+        count += 1
     return None
 
 
@@ -587,14 +603,14 @@ def resolve_vars_recursive(d, vars):
         elif type(value) == list:
             resolved_list = []
             for i in value:
-                ri = resolve_single_var(i, stack_vars)
+                ri = resolve_vars(i, stack_vars)
                 if ri:
                     resolved_list.append(ri)
                 else:
                     resolved_list.append(i)
             d[k] = resolved_list
         else:
-            var = resolve_single_var(d[k], stack_vars)
+            var = resolve_vars(d[k], stack_vars)
             if var:
                 d[k] = var
     if "jsn_vars" in d.keys():
