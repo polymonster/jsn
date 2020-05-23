@@ -172,6 +172,8 @@ import test.jsn
         	["${vb}", "non var"]
         ],
         
+        multiple_vars: "${va}/${vb}.bin",
+        
         q1: "small 'quotes' inside",
         q2: 'double "quotes" inside',
         q3: "double escaped \"quotes\" inside"
