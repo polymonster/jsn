@@ -193,8 +193,8 @@ import test.jsn
         ],
         
         array_with_string_commas:[
-        	"test,2",
-        	"test,3"
+            "test,2",
+            "test,3"
         ],
         
         nested_objects:
@@ -206,9 +206,9 @@ import test.jsn
             }
         },
         
-		multi_type_arrays:[
-        	1,
-        	[2, 3]
+        multi_type_arrays:[
+            1,
+            [2, 3]
         ],
         
         array_of_arrays:[
