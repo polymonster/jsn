@@ -73,8 +73,7 @@ def create_dir(dst_file):
         dir = os.path.dirname(dir)
     if len(dir) == 0:
         return
-    if not os.path.exists(dir):
-        os.makedirs(dir)
+    os.makedirs(dir, exist_ok=True)
 
 
 # change extension

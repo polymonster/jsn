@@ -1,9 +1,9 @@
 # jsn
 [![Build Status](https://travis-ci.org/polymonster/jsn.svg?branch=master)](https://travis-ci.org/polymonster/jsn) [![Build Status](https://github.com/polymonster/jsn/workflows/build-pkg/badge.svg)](https://github.com/polymonster/jsn/actions) [![codecov](https://codecov.io/gh/polymonster/jsn/branch/master/graph/badge.svg)](https://codecov.io/gh/polymonster/jsn) [![PyPI Version](https://img.shields.io/pypi/v/jsn.svg)](https://pypi.org/project/jsn/) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-jsn is a user-friendly data format that can be reliably edited by humans by addressing some of the common mistakes that occur when using standard json. 
+jsn is a user-friendly data format that can be reliably edited by humans, addressing some of the common mistakes that occur when using json. 
 
-It adds powerful features such as inheritence, variables, includes and syntax improvements to make jsn files more compact and re-usable than a json counterpart, it is an ideal solution for complex multi-platform build configuration and is currently being used in a number of personal and professional projects.
+It adds features such as inheritence, variables, includes and syntax improvements to make jsn files more compact and re-usable than a json counterpart, it is an ideal solution for multi-platform build configuration, packaging and content buidling pipelines.
 
 jsn can be used directly in python as a dictionary, or it can be converted to json to be used with other languages and tools and libraries which have json support.
 
@@ -63,6 +63,7 @@ json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
 
 ```c++
 import import.jsn
+import test.jsn
 {   
     // sytax highlights quite nicely in most editors with c or c++ syntax      
     
@@ -187,8 +188,13 @@ import import.jsn
         empty_array: [],
 
         array_of_objects:[
-            {object: 1},
-            {object: 2}
+            {object: 1, other: "value"},
+            {object: 2, other: "value"}
+        ],
+        
+        array_with_string_commas:[
+            "test,2",
+            "test,3"
         ],
         
         nested_objects:
@@ -199,6 +205,11 @@ import import.jsn
                 deeper: nesting
             }
         },
+        
+        multi_type_arrays:[
+            1,
+            [2, 3]
+        ],
         
         array_of_arrays:[
             [hello, world],
@@ -215,6 +226,18 @@ import import.jsn
             .255
         ],
         
+        jsn_vars: 
+        {
+            va: "path/to/data",
+            vb: "hello",
+        },
+        array_of_array_vars: [
+        	["${va}", "${vb}"],
+        	["${vb}", "non var"]
+        ],
+        
+        multiple_vars: "${va}/${vb}.bin",
+        
         q1: "small 'quotes' inside",
         q2: 'double "quotes" inside',
         q3: "double escaped \"quotes\" inside"
@@ -224,164 +247,3 @@ import import.jsn
     str_test: ":[{}]'+.,0b0x" // this tests ignoring special chars inside quotes
 }
 ```
-
-## Output json from .jsn
-
-```json
-{
-    "json": {
-        "bool": true,
-        "int": 1,
-        "float": 1.0,
-        "string": "yes",
-        "array": [
-            1,
-            2,
-            3
-        ]
-    },
-    "json5": {
-        "unquoted": "and you can quote me on that",
-        "single_quotes": "I can use \"doublequotes\" here",
-        "hexadecimal": 912559,
-        "line_breaks": "Look, Mom! No \\n's!",
-        "leading_decimal_point": 0.8675309,
-        "and_trailing": 8675309.0,
-        "positive_sign": 1,
-        "trailing_comma": "in objects",
-        "and_in": [
-            "arrays"
-        ]
-    },
-    "jsn": {
-        "unquoted_string": "without_whitespace",
-        "unquoted": [
-            "strings",
-            "in",
-            "arrays"
-        ],
-        "binary_literal": 19,
-        "bit_shifts": 65792,
-        "variable_data_path": "path/to/data/subdir",
-        "variable_int": 10,
-        "array_of_vars": [
-            "path/to/data",
-            "hello"
-        ],
-        "base": "foo",
-        "sub_object": {
-            "one": "1",
-            "two": "2",
-            "nested_var": 10
-        },
-        "platform": {
-            "base": "exists",
-            "exe": "path/mac/program"
-        }
-    },
-    "inheritence": {
-        "base": "bar",
-        "sub_object": {
-            "three": "3",
-            "one": "1",
-            "two": "2",
-            "nested_var": 10
-        },
-        "unquoted_string": "without_whitespace",
-        "unquoted": [
-            "strings",
-            "in",
-            "arrays"
-        ],
-        "binary_literal": 19,
-        "bit_shifts": 65792,
-        "variable_data_path": "path/to/data/subdir",
-        "variable_int": 10,
-        "array_of_vars": [
-            "path/to/data",
-            "hello"
-        ],
-        "platform": {
-            "base": "exists",
-            "exe": "path/mac/program"
-        }
-    },
-    "objb": {
-        "b": "b"
-    },
-    "multiple_inheritence": {
-        "c": "c",
-        "base": "bar",
-        "sub_object": {
-            "three": "3",
-            "one": "1",
-            "two": "2",
-            "nested_var": 22
-        },
-        "unquoted_string": "without_whitespace",
-        "unquoted": [
-            "strings",
-            "in",
-            "arrays"
-        ],
-        "binary_literal": 19,
-        "bit_shifts": 65792,
-        "variable_data_path": "another/path/to/data/subdir",
-        "variable_int": 22,
-        "array_of_vars": [
-            "another/path/to/data",
-            "hello"
-        ],
-        "platform": {
-            "base": "exists",
-            "exe": "path/mac/program"
-        },
-        "b": "b"
-    },
-    "xxx": {
-        "empty_object": {},
-        "empty_array": [],
-        "array_of_objects": [
-            {
-                "object": 1
-            },
-            {
-                "object": 2
-            }
-        ],
-        "nested_objects": {
-            "yes": true,
-            "and": {
-                "deeper": "nesting"
-            }
-        },
-        "array_of_arrays": [
-            [
-                "hello",
-                "world"
-            ],
-            [
-                "goodbye",
-                "world"
-            ]
-        ],
-        "array_of_values": [
-            255,
-            255,
-            255,
-            2,
-            5,
-            5,
-            0.255
-        ],
-        "q1": "small 'quotes' inside",
-        "q2": "double \"quotes\" inside",
-        "q3": "double escaped \"quotes\" inside"
-    },
-    "str_test": ":[{}]'+.,0b0x",
-    "another_file": {
-        "jsn": "can import content from other files"
-    }
-}
-```
-
