@@ -5,10 +5,10 @@ with open("readme.md", "r") as fh:
 
 setuptools.setup(
     name="jsn",
-    version="1.1.9",
+    version="1.2.0",
     author="Alex Dixon",
     author_email="alexandercdixon@gmail.com",
-    description="A relaxed, user-friendly json-like data format with comments, includes, inheritance and syntactic sugar.. extending json and json5.",
+    description="A relaxed, user-friendly json-like data format.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/polymonster/jsn",
@@ -20,6 +20,5 @@ setuptools.setup(
         "Development Status :: 4 - Beta",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent"
-    ]   
-    
+    ]
 )
