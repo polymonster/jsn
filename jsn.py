@@ -151,6 +151,15 @@ def find_strings(jsn):
     return str_list
 
 
+# trims whitespace from lines
+def trim_whitespace(jsn):
+    lines = jsn.split('\n')
+    trimmed = ""
+    for l in lines:
+        trimmed += l.strip() + "\n"
+    return trimmed
+
+
 # remove whitespace and newlines to simplify subsequent ops
 def clean_src(jsn):
     clean = ""
@@ -478,7 +487,22 @@ def remove_trailing_commas(jsn):
             if jsn[j] in trail:
                 continue
         clean += char
+    if clean[len(clean)-1] == ",":
+        clean = clean[:len(clean)-1]
     return clean
+
+
+# inserts commas in place of newlines \n
+def add_new_line_commas(jsn):
+    prev_char = ""
+    corrected = ""
+    ignore_previous = [",", ":", "{", "\n", "\\", "["]
+    for char in jsn:
+        if char == '\n' and prev_char not in ignore_previous:
+            corrected += ','
+        corrected += char
+        prev_char = char
+    return corrected
 
 
 # inherit dict member wise
@@ -665,6 +689,8 @@ def loads(jsn, import_dirs=None):
     jsn, imports = get_imports(jsn, import_dirs)
     jsn = remove_comments(jsn)
     jsn = change_quotes(jsn)
+    jsn = trim_whitespace(jsn)
+    jsn = add_new_line_commas(jsn)
     jsn = collapse_line_breaks(jsn)
     jsn = clean_src(jsn)
     jsn = quote_object(jsn)
