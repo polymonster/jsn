@@ -1,9 +1,9 @@
 # jsn
 [![Build Status](https://travis-ci.org/polymonster/jsn.svg?branch=master)](https://travis-ci.org/polymonster/jsn) [![Build Status](https://github.com/polymonster/jsn/workflows/build-pkg/badge.svg)](https://github.com/polymonster/jsn/actions) [![codecov](https://codecov.io/gh/polymonster/jsn/branch/master/graph/badge.svg)](https://codecov.io/gh/polymonster/jsn) [![PyPI Version](https://img.shields.io/pypi/v/jsn.svg)](https://pypi.org/project/jsn/) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-jsn is a user-friendly data format that can be reliably edited by humans, addressing some of the common mistakes that occur when using json. 
+jsn is a user-friendly data format that can be easily read and reliably edited by humans. 
 
-It adds features such as inheritence, variables, includes and syntax improvements to make jsn files more compact and re-usable than a json counterpart, it is an ideal solution for multi-platform build configuration, packaging and content buidling pipelines.
+It adds powerful features such as inheritence, variables, includes and syntax improvements to make jsn files more compact and re-usable than a json counterpart, it is an ideal solution for multi-platform build configuration, packaging and content buidling pipelines.
 
 jsn can be used directly in python as a dictionary, or it can be converted to json to be used with other languages and tools and libraries which have json support.
 
@@ -103,45 +103,58 @@ import test.jsn
     // jsn features
     jsn:
     {
-        unquoted_string: without_whitespace, // cannot contain whitespace or special chars (see str_test)
-        unquoted: [strings, in, arrays],
-        binary_literal: 0b10011,
-        bit_shifts: 1<<16 | 1<<8,
+    	// ditch the quotes and commas!
+        unquoted_string: without_whitespace // cannot contain whitespace or special chars (see str_test)
+        unquoted: [strings, in, arrays]
+        binary_literal: 0b10011
+        bit_shifts: 1<<16 | 1<<8
         
+        // mixed newline and commas
+        object_members_separated_by_newline: {
+        	no_commas: yes
+        	with_new_lines: "if you like"
+        	but: "you can", still: "use them here"
+        }
+		arrays_elements_separated_by_newline:[
+        	"no need for commas"
+        	"if you use newlines"
+        	"still", "separate", "using commas", "on the same line"
+    	]
+
         // you can define variables to be re-used
         jsn_vars: 
         {
-            data: "path/to/data",
-            var_str: "hello",
+            data: "path/to/data"
+            var_str: "hello"
             var_int: 10
-        },
+        }
         
         // evaluate variables with ${} inside quotes..
-        variable_data_path: "${data}/subdir",
-        variable_int: "${var_int}",
-        array_of_vars: ["${data}", "${var_str}"],
+        variable_data_path: "${data}/subdir"
+        variable_int: "${var_int}"
+        array_of_vars: ["${data}", "${var_str}"]
         
-        // inheritance below..
-        base: "foo",
+        // subobjects can be merged and inherited recursively see ** inheritence(jsn)
+        base: "foo"
         sub_object:
         {
-            one: "1",
-            two: "2",
-            nested_var: "${var_int}", // variable comes from outer scope.
-        }, // allow trailing commas
+            one: "1"
+            two: "2"
+            nested_var: "${var_int}" // variable comes from outer scope.
+        }
         
         // use <windows, mac, linux> in angled brackets to conditionally include or exclude keys
         // the platform specific keys will be merged into the base key if one exists
         platform:
         {
             base: "exists"
-        },
+        }
         
         // useful for selecting platform specific paths and executables
         platform<windows>:
         {
             exe: "path/windows/program.exe"
-        },
+        }
         
         platform<mac>:
         {
@@ -149,9 +162,10 @@ import test.jsn
         }
     },
     
+    //** 
     inheritence(jsn): // add object name to inherit inside parenthesis
     {        
-        // inheritance adds keys from jsn object
+        // inheritance adds keys from 'jsn' object
         // ..
         
         // duplicated keys are overridden by the derived object
@@ -193,8 +207,8 @@ import test.jsn
         ],
         
         array_with_string_commas:[
-            "test,2",
-            "test,3"
+        	"test,2",
+        	"test,3"
         ],
         
         nested_objects:
@@ -206,9 +220,9 @@ import test.jsn
             }
         },
         
-        multi_type_arrays:[
-            1,
-            [2, 3]
+		multi_type_arrays:[
+        	1,
+        	[2, 3]
         ],
         
         array_of_arrays:[
