@@ -420,8 +420,8 @@ def quote_object(jsn):
         # ignore : inside quotes
         iq = is_inside_quotes(str_list, pos)
         if iq:
-            quoted += jsn[cur:iq]
-            pos = iq
+            quoted += jsn[cur:iq] + ":"
+            pos = iq + 1
             continue
         delim = 0
         for d in delimiters:
