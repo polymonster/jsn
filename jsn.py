@@ -547,8 +547,7 @@ def get_imports(jsn, import_dirs):
         return jsn[bp:], imports
     if not import_dirs:
         filedir = os.getcwd()
-        print("WARNING: jsn loads() import file paths will be relative to cwd " + filedir)
-        print("\t use load_from_file() for import paths relative to the jsn file.")
+        import_dirs = [filedir]
     for i in head:
         if i.find("import") != -1:
             stripped = i[len("import"):].strip().strip("\"").strip()
@@ -604,8 +603,6 @@ def resolve_vars(value, vars):
                 else:
                     return vars[var_name]
         else:
-            print(platform.system())
-            print(json.dumps(vars, indent=4))
             print(value)
             print("error: undefined variable '" + var_name + "'")
             exit(1)
@@ -685,7 +682,7 @@ def load_from_file(filepath, import_dirs):
 
 
 # convert jsn to json
-def loads(jsn, import_dirs=None):
+def loads(jsn, import_dirs=None, vars=True):
     jsn, imports = get_imports(jsn, import_dirs)
     jsn = remove_comments(jsn)
     jsn = change_quotes(jsn)
@@ -709,7 +706,7 @@ def loads(jsn, import_dirs=None):
 
     # import
     for i in imports:
-        include_dict = loads(open(i, "r").read(), import_dirs)
+        include_dict = loads(open(i, "r").read(), import_dirs, False)
         inherit_dict(j, include_dict)
 
     # resolve platform specific keys
@@ -719,7 +716,8 @@ def loads(jsn, import_dirs=None):
     inherit_dict_recursive(j, j)
 
     # resolve vars
-    resolve_vars_recursive(j, dict())
+    if vars:
+    	resolve_vars_recursive(j, dict())
 
     return j
 
