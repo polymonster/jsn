@@ -529,6 +529,9 @@ def inherit_dict_recursive(d, d2):
         for i in inherits:
             if i in d2.keys():
                 inherit_dict(d, d2[i])
+            else:
+                print("[jsn error] missing key `" + i + "` used by jsn_inherit")
+                exit(1)
     for k, v in d.items():
         if type(v) == dict:
             inherit_dict_recursive(v, d)
@@ -559,7 +562,8 @@ def get_imports(jsn, import_dirs):
                     found = True
                     break
             if not found:
-                print("ERROR: cannot find import file " + stripped)
+                print("[jsn error]: cannot find import file " + stripped)
+                exit(1)
     return jsn[bp:], imports
 
 
@@ -603,8 +607,7 @@ def resolve_vars(value, vars):
                 else:
                     return vars[var_name]
         else:
-            print(value)
-            print("error: undefined variable '" + var_name + "'")
+            print("[jsn error] undefined variable '" + var_name + "'")
             exit(1)
         count += 1
     return None
@@ -669,7 +672,7 @@ def resolve_platform_keys(d):
     if platform.system() in name_lookup:
         platform_name = name_lookup[platform.system()]
     else:
-        print("warning: unknown platform system " + platform.system())
+        print("[jsn warning] unknown platform system " + platform.system())
     resolve_platform_keys_recursive(d, platform_name)
 
 
@@ -717,7 +720,7 @@ def loads(jsn, import_dirs=None, vars=True):
 
     # resolve vars
     if vars:
-    	resolve_vars_recursive(j, dict())
+        resolve_vars_recursive(j, dict())
 
     return j
 
