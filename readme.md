@@ -111,14 +111,14 @@ import test.jsn
         
         // mixed newline and commas
         object_members_separated_by_newline: {
-        	no_commas: yes
-        	with_new_lines: "if you like"
-        	but: "you can", still: "use them here"
+            no_commas: yes
+            with_new_lines: "if you like"
+            but: "you can", still: "use them here"
         }
-		arrays_elements_separated_by_newline:[
-        	"no need for commas"
-        	"if you use newlines"
-        	"still", "separate", "using commas", "on the same line"
+        arrays_elements_separated_by_newline:[
+            "no need for commas"
+            "if you use newlines"
+            "still", "separate", "using commas", "on the same line"
     	]
 
         // you can define variables to be re-used
@@ -207,8 +207,8 @@ import test.jsn
         ],
         
         array_with_string_commas:[
-        	"test,2",
-        	"test,3"
+            "test,2",
+            "test,3"
         ],
         
         nested_objects:
@@ -220,9 +220,9 @@ import test.jsn
             }
         },
         
-		multi_type_arrays:[
-        	1,
-        	[2, 3]
+        multi_type_arrays:[
+            1,
+            [2, 3]
         ],
         
         array_of_arrays:[
@@ -245,9 +245,10 @@ import test.jsn
             va: "path/to/data",
             vb: "hello",
         },
+	
         array_of_array_vars: [
-        	["${va}", "${vb}"],
-        	["${vb}", "non var"]
+            ["${va}", "${vb}"],
+            ["${vb}", "non var"]
         ],
         
         multiple_vars: "${va}/${vb}.bin",
