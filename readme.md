@@ -133,6 +133,11 @@ import test.jsn
         variable_data_path: "${data}/subdir"
         variable_int: "${var_int}"
         array_of_vars: ["${data}", "${var_str}"]
+
+        // you can use special variables:
+        // inject the current script directory into a string
+        // - this is the directory name of the file this variable is used in
+        script_directory: "${script_dir}" 
         
         // subobjects can be merged and inherited recursively see ** inheritence(jsn)
         base: "foo"

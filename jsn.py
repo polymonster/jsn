@@ -710,6 +710,14 @@ def loads(jsn, import_dirs=None, vars=True):
     # import
     for i in imports:
         include_dict = loads(open(i, "r").read(), import_dirs, False)
+
+        # nested var lookups, only works currently on special vars
+        if "jsn_vars" in include_dict.keys():
+            vv = json.dumps(include_dict["jsn_vars"])
+            vv = vv.replace("${script_dir}", os.path.dirname(i))
+            vv = vv.replace("\\", "/")
+            include_dict["jsn_vars"] = json.loads(vv)
+
         inherit_dict(j, include_dict)
 
     # resolve platform specific keys
