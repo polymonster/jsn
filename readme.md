@@ -39,7 +39,8 @@ commandline arguments:
     -i list of input files or directories to process
     -o output file or directory 
     -I list of import directories, to search for imports
-    -p print output to console 
+    -p print output to console
+    -keep_vars keep jsn_vars in the output json
 ```
 
 # Python API

@@ -49,9 +49,10 @@ def display_help():
     print("commandline arguments:")
     print("    -help display this message")
     print("    -i list of input files or directories to process")
-    print("    -o output file or directory ")
+    print("    -o output file or directory")
     print("    -I list of import directories, to search for imports")
-    print("    -p print output to console ")
+    print("    -p print output to console")
+    print("    -keep_vars keep jsn_vars in the output json")
 
 
 # do c like (u32)-1
