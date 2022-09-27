@@ -14,6 +14,7 @@ class BuildInfo:
     import_dirs = []    # lst of import directories to search
     output_dir = ""     # output directory
     print_out = False   # print out the resulting json from jsn to the console
+    keep_vars = False   # keep jsn_vars int the resulting json, set to false to pop them
 
 
 # parse command line args passed in
@@ -38,6 +39,8 @@ def parse_args():
             info.output_dir = sys.argv[i + 1]
         elif sys.argv[i] == "-p":
             info.print_out = True
+        elif sys.argv[i] == "-keep_vars":
+            info.keep_vars = True
     return info
 
 
@@ -614,7 +617,7 @@ def resolve_vars(value, vars):
 
 
 # replace ${} with variables in vars
-def resolve_vars_recursive(d, vars):
+def resolve_vars_recursive(d, vars, keep_vars=False):
     stack_vars = vars.copy()
     if "jsn_vars" in d.keys():
         for vk in d["jsn_vars"].keys():
@@ -622,7 +625,7 @@ def resolve_vars_recursive(d, vars):
     for k in d.keys():
         value = d[k]
         if type(value) == dict:
-            resolve_vars_recursive(d[k], stack_vars)
+            resolve_vars_recursive(d[k], stack_vars, keep_vars)
         elif type(value) == list:
             resolved_list = []
             for i in value:
@@ -636,7 +639,7 @@ def resolve_vars_recursive(d, vars):
             var = resolve_vars(d[k], stack_vars)
             if var:
                 d[k] = var
-    if "jsn_vars" in d.keys():
+    if "jsn_vars" in d.keys() and not keep_vars:
         d.pop("jsn_vars", None)
 
 
@@ -677,15 +680,15 @@ def resolve_platform_keys(d):
 
 
 # load from file
-def load_from_file(filepath, import_dirs):
+def load_from_file(filepath, import_dirs, keep_vars):
     jsn_contents = open(filepath).read()
     filepath = os.path.join(os.getcwd(), filepath)
     import_dirs.append(os.path.dirname(filepath))
-    return loads(jsn_contents, import_dirs)
+    return loads(jsn_contents, import_dirs, keep_vars=keep_vars)
 
 
 # convert jsn to json
-def loads(jsn, import_dirs=None, vars=True):
+def loads(jsn, import_dirs=None, vars=True, keep_vars=False):
     jsn, imports = get_imports(jsn, import_dirs)
     jsn = remove_comments(jsn)
     jsn = change_quotes(jsn)
@@ -709,7 +712,7 @@ def loads(jsn, import_dirs=None, vars=True):
 
     # import
     for i in imports:
-        include_dict = loads(open(i, "r").read(), import_dirs, False)
+        include_dict = loads(open(i, "r").read(), import_dirs, False, keep_vars=keep_vars)
 
         # nested var lookups, only works currently on special vars
         if "jsn_vars" in include_dict.keys():
@@ -728,7 +731,7 @@ def loads(jsn, import_dirs=None, vars=True):
 
     # resolve vars
     if vars:
-        resolve_vars_recursive(j, dict())
+        resolve_vars_recursive(j, dict(), keep_vars)
 
     return j
 
@@ -752,7 +755,7 @@ def get_import_file_list(filepath, import_dirs=None):
 def convert_jsn(info, input_file, output_file):
     print("converting: " + input_file + " to " + output_file)
     output_file = open(output_file, "w+")
-    jdict = load_from_file(input_file, info.import_dirs)
+    jdict = load_from_file(input_file, info.import_dirs, info.keep_vars)
     if info.print_out:
         print(json.dumps(jdict, indent=4))
     output_file.write(json.dumps(jdict, indent=4))
