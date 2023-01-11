@@ -251,6 +251,9 @@ import test.jsn
             va: "path/to/data",
             vb: "hello",
         },
+
+        value: null,
+        array_of_null: [null, null, null]
 	
         array_of_array_vars: [
             ["${va}", "${vb}"],

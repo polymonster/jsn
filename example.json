@@ -209,6 +209,8 @@
                 "non var"
             ]
         ],
+		"value": null,
+        "array_of_null": [null, null, null],
         "multiple_vars": "path/to/data/hello.bin",
         "q1": "small 'quotes' inside",
         "q2": "double \"quotes\" inside",

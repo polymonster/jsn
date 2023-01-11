@@ -175,6 +175,9 @@ import test.jsn
             1 << 2 | 1,
             .255
         ],
+		
+		value: null,
+        array_of_null: [null, null, null],
         
         jsn_vars: 
         {

@@ -398,6 +398,8 @@ def quote_array(jsn):
         elif elem[0] == '\"':
             elem_end += enclose_brackets("\"", "\"", jsn, pos)
             element_wise = jsn[pos:elem_end]
+        elif elem == "null":
+            element_wise += "null"
         else:
             element_wise += quote_value(elem, 0, 0)[0]
         if elem_end == len(jsn):
@@ -473,6 +475,9 @@ def quote_object(jsn):
             end = enclose_brackets("[", "]", jsn, pos)
             quoted += quote_array(jsn[pos+1:end-1])
             pos = end
+        elif value == "null":
+            quoted += "null"
+            pos = pos + len("null")
         else:
             value = quote_value(value, pos, next)
             quoted += value[0]
