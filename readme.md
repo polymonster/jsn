@@ -20,6 +20,7 @@ If you are using hand edited json in any projects currently, jsn will easily int
 - Single and multi-line comments.
 - Multi-line strings / line breaks.
 - Hex, binary, bit shifts, int and float improvements.
+- TextMate langauge included for enhanced syntax highlighting.
 
 # CLI
 
