@@ -1,6 +1,7 @@
 # jsn
+[![tests](https://github.com/polymonster/jsn/actions/workflows/tests.yaml/badge.svg)](https://github.com/polymonster/jsn/actions/workflows/tests.yaml) 
 [![build-release](https://github.com/polymonster/jsn/actions/workflows/release.yaml/badge.svg)](https://github.com/polymonster/jsn/actions/workflows/release.yaml) 
-[![publish-pypi](https://github.com/polymonster/jsn/actions/workflows/main.yaml/badge.svg)](https://github.com/polymonster/jsn/actions/workflows/main.yaml) 
+[![publish-pypi](https://github.com/polymonster/jsn/actions/workflows/pypi.yaml/badge.svg)](https://github.com/polymonster/jsn/actions/workflows/pypi.yaml) 
 [![codecov](https://codecov.io/gh/polymonster/jsn/branch/master/graph/badge.svg)](https://codecov.io/gh/polymonster/jsn) 
 [![PyPI Version](https://img.shields.io/pypi/v/jsn.svg)](https://pypi.org/project/jsn/) 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) 
