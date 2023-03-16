@@ -1,5 +1,9 @@
 # jsn
-[![Build Status](https://travis-ci.org/polymonster/jsn.svg?branch=master)](https://travis-ci.org/polymonster/jsn) [![publish-pypi](https://github.com/polymonster/jsn/actions/workflows/main.yaml/badge.svg)](https://github.com/polymonster/jsn/actions/workflows/main.yaml)(https://github.com/polymonster/jsn/actions) [![codecov](https://codecov.io/gh/polymonster/jsn/branch/master/graph/badge.svg)](https://codecov.io/gh/polymonster/jsn) [![PyPI Version](https://img.shields.io/pypi/v/jsn.svg)](https://pypi.org/project/jsn/) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![build-release](https://github.com/polymonster/jsn/actions/workflows/release.yaml/badge.svg)](https://github.com/polymonster/jsn/actions/workflows/release.yaml) 
+[![publish-pypi](https://github.com/polymonster/jsn/actions/workflows/main.yaml/badge.svg)](https://github.com/polymonster/jsn/actions/workflows/main.yaml) 
+[![codecov](https://codecov.io/gh/polymonster/jsn/branch/master/graph/badge.svg)](https://codecov.io/gh/polymonster/jsn) 
+[![PyPI Version](https://img.shields.io/pypi/v/jsn.svg)](https://pypi.org/project/jsn/) 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) 
 
 jsn is a user-friendly data format that can be easily read and reliably edited by humans. 
 
