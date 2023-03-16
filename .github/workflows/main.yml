@@ -1,5 +1,8 @@
 name: build-pkg
-on: push
+on:
+  push:
+    tags:
+    - '*'
 jobs:
   build-n-publish:
     name: Build and publish to PyPi
@@ -35,7 +38,6 @@ jobs:
           repository_url: https://test.pypi.org/legacy/
           packages_dir: pypi/dist
       - name: Publish distribution 📦 to PyPI
-        if: startsWith(github.event.ref, 'refs/heads/pypi')
         uses: pypa/gh-action-pypi-publish@master
         with:
           password: ${{ secrets.pypi_password }}
