@@ -1,0 +1,18 @@
+on: [push]
+name: tests
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: "recursive"
+      - name: pip
+        run: |
+          pip install codecov
+          pip install coverage
+      - name: test
+        run: |
+          coverage run jsn.py -i example.jsn -o test.json -I import_dir
+          codecov

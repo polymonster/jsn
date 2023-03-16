@@ -9,8 +9,8 @@ jsn can be used directly in python as a dictionary, or it can be converted to js
 
 If you are using hand edited json in any projects currently, jsn will easily integrate into your existing workflow and improve efficiency and reliability.
 
-
 # Features
+
 - Includes / file import.
 - Inheritance (hierarchicle and multiple).
 - Environment style scoped variables.
@@ -61,13 +61,19 @@ import jsn
 json_dict = jsn.loads(open("jsn_file.jsn", "r").read())
 ```
 
+# Releases
+
+You can install `jsn` as a binary release found along with this repository [here](https://github.com/polymonster/jsn/releases)
+
 ## Example .jsn
 
-```c++
+```jsonnet
 import import.jsn
 import test.jsn
 {   
-    // sytax highlights quite nicely in most editors with c or c++ syntax      
+    // sytax highlights quite nicely in most editors with c or c++ syntax
+    // jsonnet highlights nicely in GitHub
+    // TextMate grammar included for visual studio, vscode or other compatible editors
     
     // allow comments
     
