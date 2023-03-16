@@ -1,4 +1,4 @@
-name: build-pkg
+name: publish-pypi
 on:
   push:
     tags:
