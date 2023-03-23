@@ -14,8 +14,7 @@ import test.jsn
     //        tabs and any whitespace allowed
 
     // compatible with json
-    "json":
-    {
+    "json": {
         "bool": true,
         "int": 1,
         "float": 1.0,
@@ -24,8 +23,7 @@ import test.jsn
     },
     
     // compatible with json5
-    json5:
-    {
+    json5: {
         unquoted: 'and you can quote me on that',
         single_quotes: 'I can use "double quotes" here',
         hexadecimal: 0xdecaf,
@@ -37,8 +35,7 @@ import test.jsn
     },
     
     // jsn features
-    jsn:
-    {
+    jsn: {
         // ditch the quotes and commas!
         unquoted_string: without_whitespace // cannot contain whitespace or special chars (see str_test)
         unquoted: [strings, in, arrays]
@@ -58,8 +55,7 @@ import test.jsn
         ]
 
         // you can define variables to be re-used
-        jsn_vars: 
-        {
+        jsn_vars: {
             data: "path/to/data"
             var_str: "hello"
             var_int: 10
@@ -72,8 +68,7 @@ import test.jsn
         
         // subobjects can be merged and inherited recursively see ** inheritence(jsn)
         base: "foo"
-        sub_object:
-        {
+        sub_object: {
             one: "1"
             two: "2"
             nested_var: "${var_int}" // variable comes from outer scope.
@@ -81,120 +76,109 @@ import test.jsn
         
         // use <windows, mac, linux> in angled brackets to conditionally include or exclude keys
         // the platform specific keys will be merged into the base key if one exists
-        platform:
-        {
+        platform: {
             base: "exists"
         }
         
         // useful for selecting platform specific paths and executables
-        platform<windows>:
-        {
+        platform<windows>: {
             exe: "path/windows/program.exe"
         }
         
-        platform<mac>:
-        {
+        platform<mac>: {
             exe: "path/mac/program"
         }
-    },
+    }
     
-    //** 
-    inheritence(jsn): // add object name to inherit inside parenthesis
-    {        
+    //** // add object name to inherit inside parenthesis
+    inheritence(jsn): {        
         // inheritance adds keys from 'jsn' object
         // ..
         
         // duplicated keys are overridden by the derived object
-        base: "bar",
+        base: "bar"
         
         // inheritance on sub-objects continues recursively
-        sub_object:
-        {
+        sub_object: {
             three: "3"
             //..
         }
-    },
+    }
     
     // multiple and hierarchical inheritance
-    objb: { b: "b" },
+    objb: { b: "b" }
     
-    multiple_inheritence(inheritence, objb):
-    {
+    multiple_inheritence(inheritence, objb): {
         // vars can also be shadowed / overriden..
-        jsn_vars: 
-        {
-            data: "another/path/to/data",
+        jsn_vars: {
+            data: "another/path/to/data"
             var_int: 22
-        },
+        }
         
         c: "c"
-    },
+    }
     
-    xxx:
-    {
+    xxx: {
         // some test cases
-        empty_object: {},
+        empty_object: {}
 
-        empty_array: [],
+        empty_array: []
 
         array_of_objects:[
-            {object: 1, other: "value"},
+            {object: 1, other: "value"}
             {object: 2, other: "value"}
-        ],
+        ]
         
         array_with_string_commas:[
             "test,2",
             "test,3"
-        ],
+        ]
         
-        nested_objects:
-        {
-            yes: true,
-            and:
-            {
+        nested_objects: {
+            yes: true
+            and: {
                 deeper: nesting
             }
-        },
+        }
         
-        multi_type_arrays:[
+        multi_type_arrays: [
             1,
             [2, 3]
-        ],
+        ]
         
         array_of_arrays:[
-            [hello, world],
+            [hello, world]
             [goodbye, world]
-        ],
+        ]
 
         array_of_values:[
-            +255,
-            0b11111111,
-            0xff,
-            1 << 1,
-            1 << 2 | 1,
-            1 << 2 | 1,
+            +255
+            0b11111111
+            0xff
+            1 << 1
+            1 << 2 | 1
+            1 << 2 | 1
             .255
-        ],
+        ]
 		
-		value: null,
-        array_of_null: [null, null, null],
+		value: null
+        array_of_null: [null, null, null]
         
-        jsn_vars: 
-        {
-            va: "path/to/data",
-            vb: "hello",
-        },
+        jsn_vars: {
+            va: "path/to/data"
+            vb: "hello"
+        }
         array_of_array_vars: [
-            ["${va}", "${vb}"],
+            ["${va}", "${vb}"]
             ["${vb}", "non var"]
-        ],
+        ]
         
-        multiple_vars: "${va}/${vb}.bin",
+        multiple_vars: "${va}/${vb}.bin"
         
-        q1: "small 'quotes' inside",
-        q2: 'double "quotes" inside',
+        q1: "small 'quotes' inside"
+        q2: 'double "quotes" inside'
         q3: "double escaped \"quotes\" inside"
-    },
+    }
     
     //**
     str_test: ":[{}]'+.,0b0x" // this tests ignoring special chars inside quotes
