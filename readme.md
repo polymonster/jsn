@@ -150,7 +150,10 @@ import test.jsn
         // you can use special variables:
         // inject the current script directory into a string
         // - this is the directory name of the file this variable is used in
-        script_directory: "${script_dir}" 
+        script_directory: "${script_dir}"
+
+        // env vars can also be injected, if no variable is found in the script jsn will fallback to check if an env var exists
+        env_vars: ${OS_ENV_VAR}
         
         // subobjects can be merged and inherited recursively see ** inheritence(jsn)
         base: "foo"

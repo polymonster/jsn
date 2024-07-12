@@ -610,8 +610,16 @@ def vars_in_string(string):
         else:
             break
     return variables
-            
-    
+
+
+# replaces a ${var} with system environment var if it exists
+def get_env_var(var_name):
+    if var_name in os.environ.keys():
+        return os.environ[var_name]
+    print_error("[jsn error] undefined variable '" + var_name + "'")
+    sys.exit(1)
+
+
 # resolves "${var}" into a typed value or a token pasted string, handle multiple vars within strings or arrays
 def resolve_vars(value, vars):
     value_string = str(value)
@@ -637,8 +645,10 @@ def resolve_vars(value, vars):
                 else:
                     return vars[var_name]
         else:
-            print_error("[jsn error] undefined variable '" + var_name + "'")
-            sys.exit(1)
+            ev = get_env_var(var_name)
+            value = value.replace(v, ev)
+            if len(vv) == count+1:
+                return value
         count += 1
     return None
 
