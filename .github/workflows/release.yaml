@@ -58,8 +58,9 @@ jobs:
           submodules: "recursive"
       - name: pyinstaller
         run: |
-          python3 -m pip install PyInstaller
-          python3 -m pip install requests
+          brew install pipx
+          pipx install PyInstaller
+          pipx install requests
       - name: build
         run: python3 -m PyInstaller jsn.py -y --onefile -i NONE --distpath build/dist/ --workpath build/work/
       - name: zip
