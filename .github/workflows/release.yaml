@@ -57,6 +57,10 @@ jobs:
         with:
           submodules: "recursive"
       - name: pyinstaller
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+          cache: 'pip'
         run: |
           pip3 install PyInstaller
           pip3 install requests
