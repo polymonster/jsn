@@ -61,7 +61,7 @@ jobs:
         with:
           python-version: '3.9'
           cache: 'pip'
-        run: |
+      - run: |
           pip3 install PyInstaller
           pip3 install requests
       - name: build
